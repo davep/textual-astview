@@ -82,7 +82,10 @@ how to use them, right now, is to take a look at [the code for
   - [ ] Searching.
 - [ ] Extend and test all the styling options.
 - [ ] Allow loading another file without leaving the app.
-- [ ] A more "rainbow" approach to highlighting the source and tree position.
+- [ ] A more "rainbow" approach to highlighting the source and tree
+      position.
+- [ ] Add support for setting the [source style](https://pygments.org/styles/).
+- [ ] Add a dark/light mode toggle to `astare`.
 - [ ] Keep on having fun hacking on it.
 - [ ] Other stuff. I'm sure there's other stuff.
 
