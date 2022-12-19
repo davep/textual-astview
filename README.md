@@ -25,10 +25,11 @@ who may not have gathered, I am employed by
 [Textualize](https://www.textualize.io/)).
 
 On the other hand: I'm *very* open to feedback and suggestions so don't
-hesitate to engage with me in the issues. I can't and won't promise that
-I'll take everything on board (see above about hobby project, etc), but
-helpful input should help make this as useful as possible in the longer
-term.
+hesitate to engage with me [in the
+issues](https://github.com/davep/textual-astview/issues). I can't and won't
+promise that I'll take everything on board (see above about hobby project,
+etc), but helpful input should help make this as useful as possible in the
+longer term.
 
 ## Installing
 
@@ -77,6 +78,9 @@ how to use them, right now, is to take a look at [the code for
 - [ ] Test on Windows.
 - [ ] Test on GNU/Linux.
 - [ ] Dial in the colour and style until I'm really happy with it.
+  - [ ] Think about which styles should end stay in `DEFAULT_CSS` and which
+        should go into an app-level CSS -- this might be a bit all over the
+        place right now.
 - [ ] More navigation features.
   - [ ] Lots of keyboard navigation coverage.
   - [ ] Searching.
