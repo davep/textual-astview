@@ -85,8 +85,11 @@ class MainDisplay( Screen ):
 class Astare( App[ None ] ):
     """Main Textual application class."""
 
-    TITLE = "astare - Python AST Explorer"
+    TITLE = "astare"
     """str: The main title of the app."""
+
+    SUB_TITLE = f"A Python AST Explorer ({__version__})"
+    """str: The sub title of the app."""
 
     def __init__( self, explore: Path, *args: Any, **kwargs: Any ) -> None:
         """Initialise the app."""
