@@ -12,6 +12,7 @@ from textual.app        import App, ComposeResult
 from textual.screen     import Screen
 from textual.widgets    import Header, Footer
 from textual.containers import Horizontal, Vertical
+from textual.binding    import Binding
 
 ##############################################################################
 # Local imports.
@@ -34,6 +35,11 @@ class MainDisplay( Screen ):
         border: double $primary-lighten-2;
     }
     """
+
+    BINDINGS = [
+        Binding( "ctrl+q", "app.quit", "Quit" )
+    ]
+    """list[ Bindings ]: The bindings for the main screen."""
 
     def __init__( self, explore: Path, *args: Any, **kwargs: Any ) -> None:
         """Initialise the main screen."""
