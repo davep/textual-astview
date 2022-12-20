@@ -22,6 +22,7 @@ from .widgets.source      import Source
 __all__ = [
     "ASTView",
     "ASTNode",
+    "NodeInfo",
     "SourceInfo",
     "Source"
 ]
