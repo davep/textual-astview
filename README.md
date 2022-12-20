@@ -78,6 +78,7 @@ how to use them, right now, is to take a look at [the code for
 - [ ] Test on Windows.
 - [ ] Test on GNU/Linux.
 - [ ] Dial in the colour and style until I'm really happy with it.
+  - [ ] Add some styling options for `NodeInfo`.
   - [ ] Think about which styles should end stay in `DEFAULT_CSS` and which
         should go into an app-level CSS -- this might be a bit all over the
         place right now.
