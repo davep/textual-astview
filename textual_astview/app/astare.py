@@ -66,8 +66,10 @@ class MainDisplay( Screen ):
         """Sort the screen once the DOM is mounted."""
         view = self.query_one( ASTView )
         view.root.expand()
-        view.root._children[ 0 ].expand()
-        view.root._children[ 0 ]._children[ 0 ].expand()
+        if view.root._children:
+            view.root._children[ 0 ].expand()
+            if view.root._children[ 0 ]._children:
+                view.root._children[ 0 ]._children[ 0 ].expand()
         view.focus()
 
     def highlight_node( self, node: ASTNode ) -> None:

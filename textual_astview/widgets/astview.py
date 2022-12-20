@@ -54,13 +54,18 @@ class ASTView( Tree[ Any ] ):
             `name_defs` to turn this off.
         """
 
+        # Remember some key stuff
+        self._name_defs   = name_defs
+        self._module_path = module
+
         # Get the AST parsed in. I *suppose* it would make sense to try and
         # do this in an async way, perhaps? But for now anyway let's just
         # parse in the whole blasted thing up front. I've never found the
         # AST parser to be noticeably slow.
-        self._name_defs   = name_defs
-        self._module_path = module
-        self._module      = ast.parse( module.read_text() )
+        try:
+            self._module = ast.parse( module.read_text() )
+        except SyntaxError:
+            self._module = None
 
         # Now that we've configured things, get the Tree to do its own
         # thing.
