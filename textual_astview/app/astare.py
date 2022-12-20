@@ -167,7 +167,6 @@ def get_args() -> argparse.Namespace:
     parser.add_argument(
         "--themes",
         action  = "version",
-        default = False,
         help    = "List the available theme names.",
         version = ", ".join( sorted( list( get_all_styles() ) ) )
     )
