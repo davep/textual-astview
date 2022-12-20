@@ -1,6 +1,6 @@
 # textual-astview
 
-![](img/astview.png)
+![](https://raw.githubusercontent.com/davep/textual-astview/main/img/astview.png)
 
 ## Introduction
 
