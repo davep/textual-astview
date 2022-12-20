@@ -107,6 +107,27 @@ class Astare( App[ None ] ):
         self.push_screen( MainDisplay( self._explore ) )
 
 ##############################################################################
+def py_file( path: str ):
+    """Check that the file we're being asked to look at seems fine
+
+    Args:
+        path (str): The argument.
+
+    Returns:
+        Path: The `Path` to the file if it looks okay.
+    """
+
+    candidate = Path( path )
+
+    if not candidate.exists():
+        raise argparse.ArgumentTypeError( f"{path} does not exist" )
+
+    if not candidate.is_file():
+        raise argparse.ArgumentTypeError( f"{path} is not a file" )
+
+    return Path( path )
+
+##############################################################################
 def get_args() -> argparse.Namespace:
     """Get the command line arguments.
 
@@ -130,7 +151,7 @@ def get_args() -> argparse.Namespace:
     )
 
     # The reminder is the file to explore.
-    parser.add_argument( "file", help="The file to explore" )
+    parser.add_argument( "file", help="The file to explore", type=py_file )
 
     # Return the arguments.
     return parser.parse_args()
@@ -143,6 +164,6 @@ def main() -> None:
     args = get_args()
 
     # Explore the file.
-    Astare( Path( args.file ) ).run()
+    Astare( args.file ).run()
 
 ### astare.py ends here
