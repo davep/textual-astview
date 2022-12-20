@@ -132,7 +132,10 @@ class ASTView( Tree[ Any ] ):
             bool: `True` if the value should be added, `False` if not.
         """
         # If it's a sequence of some description, and it's empty, perhaps
-        # not add it. Otherwise do add it.
+        # not add it. Otherwise do add it. Note the over-protective casting;
+        # mypy seems fine about the code without it (and actually moans when
+        # I have it), pyright on the other hand wants me to be
+        # super-specific here it seems.
         return bool( cast( list[ Any ] | tuple[ Any, ... ], value ) ) if isinstance( value, ( list, tuple ) ) else True
 
     @singledispatchmethod
