@@ -7,6 +7,10 @@ from typing  import Any
 from pathlib import Path
 
 ##############################################################################
+# Pygments imports.
+from pygments.styles import get_all_styles
+
+##############################################################################
 # Textual imports.
 from textual.app        import App, ComposeResult
 from textual.screen     import Screen
@@ -150,9 +154,11 @@ def get_args() -> argparse.Namespace:
         epilog      = f"v{__version__}"
     )
 
-    # Add --style
+    # Add --theme
     parser.add_argument(
         "-t", "--theme",
+        choices = list( get_all_styles() ),
+        metavar = "THEME",
         default = Source.DEFAULT_THEME,
         help    = "Set the theme for the source display.",
     )
