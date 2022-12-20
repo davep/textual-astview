@@ -96,6 +96,7 @@ and available and then have this sorted.
 - [ ] Add support for setting the [source style](https://pygments.org/styles/).
 - [ ] Add a dark/light mode toggle to `astare`.
 - [ ] Better handle really long "paths" in `NodeInfo`.
+- [ ] In `astare` allow resizing of the panes.
 - [ ] Keep on having fun hacking on it.
 - [ ] Other stuff. I'm sure there's other stuff.
 
