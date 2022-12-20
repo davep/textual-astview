@@ -163,6 +163,15 @@ def get_args() -> argparse.Namespace:
         help    = "Set the theme for the source display.",
     )
 
+    # Add --themes
+    parser.add_argument(
+        "--themes",
+        action  = "version",
+        default = False,
+        help    = "List the available theme names.",
+        version = ", ".join( sorted( list( get_all_styles() ) ) )
+    )
+
     # Add --version
     parser.add_argument(
         "-v", "--version",
