@@ -51,7 +51,7 @@ class Source( SourceInfo, can_focus=True ):
     def __init__( self, source: Path, *args: Any, **kwargs: Any ) -> None:
         """Initialise the source viewing widget."""
         super().__init__( *args, **kwargs )
-        self._source = Syntax.from_path( str( source ), line_numbers=True )
+        self._source = Syntax.from_path( str( source ), line_numbers=True, lexer="python" )
 
     def compose( self ) -> ComposeResult:
         """Compose the source display.
