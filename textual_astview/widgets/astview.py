@@ -146,7 +146,7 @@ class ASTView( Tree[ Any ] ):
         # If we've been given a list or a tuple...
         if isinstance( item, ( list, tuple ) ):
             # ...let's unroll what's inside, attaching everything to the
-            # given ode.
+            # given node.
             for row in cast( list[ Any ] | tuple[ Any, ... ], item ):
                 self.add( row, to_node )
         else:
