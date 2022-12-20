@@ -109,7 +109,7 @@ class Astare( App[ None ] ):
         self.push_screen( MainDisplay( self._explore ) )
 
 ##############################################################################
-def py_file( path: str ):
+def py_file( path: str ) -> Path:
     """Check that the file we're being asked to look at seems fine
 
     Args:
