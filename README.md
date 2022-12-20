@@ -74,6 +74,10 @@ how to use them, right now, is to take a look at [the code for
 
 ## TODO
 
+If you're seeing this that means I decided to release so folk can have a
+play. There's a bunch of stuff I still want to do but it can be out there
+and available and then have this sorted.
+
 - [X] Add some actual error checking around loading the file.
 - [ ] Test on Windows.
 - [ ] Test on GNU/Linux.
@@ -91,6 +95,7 @@ how to use them, right now, is to take a look at [the code for
       position.
 - [ ] Add support for setting the [source style](https://pygments.org/styles/).
 - [ ] Add a dark/light mode toggle to `astare`.
+- [ ] Better handle really long "paths" in `NodeInfo`.
 - [ ] Keep on having fun hacking on it.
 - [ ] Other stuff. I'm sure there's other stuff.
 
