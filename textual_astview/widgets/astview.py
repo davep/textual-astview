@@ -139,7 +139,7 @@ class ASTView( Tree[ Any ] ):
         # mypy seems fine about the code without it (and actually moans when
         # I have it), pyright on the other hand wants me to be
         # super-specific here it seems.
-        return bool( cast( list[ Any ] | tuple[ Any, ... ], value ) ) if isinstance( value, ( list, tuple ) ) else True
+        return bool( cast( list[ Any ] | tuple[ Any, ... ], value ) ) if isinstance( value, ( list, tuple ) ) else True # type: ignore
 
     @singledispatchmethod
     def add( self, item: Any, to_node: ASTNode ) -> None:
@@ -152,8 +152,9 @@ class ASTView( Tree[ Any ] ):
         # If we've been given a list or a tuple...
         if isinstance( item, ( list, tuple ) ):
             # ...let's unroll what's inside, attaching everything to the
-            # given node.
-            for row in cast( list[ Any ] | tuple[ Any, ... ], item ):
+            # given node. (the over-protective cast is to keep pyright
+            # happy; the ignore if it is to keep mypy happy).
+            for row in cast( list[ Any ] | tuple[ Any, ... ], item ): # type: ignore
                 self.add( row, to_node )
         else:
             # Not a list or similar, so mark the item as a leaf and str it.
