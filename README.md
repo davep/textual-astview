@@ -74,7 +74,7 @@ how to use them, right now, is to take a look at [the code for
 
 ## TODO
 
-- [ ] Add some actual error checking around loading the file.
+- [X] Add some actual error checking around loading the file.
 - [ ] Test on Windows.
 - [ ] Test on GNU/Linux.
 - [ ] Dial in the colour and style until I'm really happy with it.
