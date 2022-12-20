@@ -39,7 +39,7 @@ setup(
     description                   = str( textual_astview.__doc__ ),
     long_description              = long_desc(),
     long_description_content_type = "text/markdown",
-    url                           = "https://github.com/davep/textual_astview",
+    url                           = "https://github.com/davep/textual-astview",
     author                        = textual_astview.__author__,
     author_email                  = textual_astview.__email__,
     maintainer                    = textual_astview.__maintainer__,
