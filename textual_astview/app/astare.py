@@ -147,7 +147,7 @@ def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog        = "astare",
         description = "A simple terminal-based AST explorer.",
-        epilog      = __version__
+        epilog      = f"v{__version__}"
     )
 
     # Add --version
