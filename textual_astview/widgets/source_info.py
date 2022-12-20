@@ -45,6 +45,11 @@ class SourceInfo( Vertical ):
         Returns:
             tuple[ int, int, int, int ] | None: The location if one can be found.
         """
+        # Textual's TreeNode doesn't currently allow access to the parent of
+        # a node, so in here we're going to do some sneaky dipping into
+        # internals. Hence:
+        #
+        # pylint:disable=protected-access
         if cls.has_location( node ):
             if ( item := node.data ) is not None: # Keep type checkers happy.
                 return item.lineno, item.col_offset, item.end_lineno, item.end_col_offset
@@ -70,6 +75,11 @@ class SourceInfo( Vertical ):
         else:
             yield str( node.data )
 
+        # Textual's TreeNode doesn't currently allow access to the parent of
+        # a node, so in here we're going to do some sneaky dipping into
+        # internals. Hence:
+        #
+        # pylint:disable=protected-access
         if node._parent is not None:
             yield from cls.path_from( node._parent )
 
