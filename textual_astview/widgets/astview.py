@@ -98,7 +98,7 @@ class ASTView( Tree[ Any ] ):
             ASTNode: The new node.
         """
         # For most AST types the label will just be the class name.
-        label = item.__class__.__name__
+        label = Text( item.__class__.__name__ )
 
         # But, for some, let's include some extra detail too to help people
         # visually scan the display.
