@@ -63,7 +63,7 @@ class ASTView( Tree[ Any ] ):
         # parse in the whole blasted thing up front. I've never found the
         # AST parser to be noticeably slow.
         try:
-            self._module = ast.parse( module.read_text() )
+            self._module: ast.Module | None = ast.parse( module.read_text() )
         except SyntaxError:
             self._module = None
 
