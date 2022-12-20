@@ -62,8 +62,11 @@ class ASTView( Tree[ Any ] ):
         self._module_path = module
         self._module      = ast.parse( module.read_text() )
 
-        # Now that we've configured things, get the Tree to do its own thing.
-        super().__init__( label=module.name, data=self._module_path, *args, **kwargs )
+        # Now that we've configured things, get the Tree to do its own
+        # thing.
+        kwargs[ "label" ] = module.name
+        kwargs[ "data" ]  = self._module_path
+        super().__init__( *args, **kwargs )
 
     @property
     def module_path( self ) -> Path:
