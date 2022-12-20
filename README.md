@@ -5,7 +5,7 @@
 ## Introduction
 
 This is a combination of a [Textual](https://textual.textualize.io/) widget
-library and also a command line too. The aim is to provide tools for
+library and also a command line tool. The aim is to provide tools for
 displaying and exploring the [Python
 AST](https://docs.python.org/3/library/ast.html).
 
@@ -25,11 +25,12 @@ who may not have gathered, I am employed by
 [Textualize](https://www.textualize.io/)).
 
 On the other hand: I'm *very* open to feedback and suggestions so don't
-hesitate to engage with me [in the
-issues](https://github.com/davep/textual-astview/issues). I can't and won't
-promise that I'll take everything on board (see above about hobby project,
-etc), but helpful input should help make this as useful as possible in the
-longer term.
+hesitate to engage with me [in
+Discussions](https://github.com/davep/textual-astview/discussions), or if
+it's a bug,[in Issues](https://github.com/davep/textual-astview/issues). I
+can't and won't promise that I'll take everything on board (see above about
+hobby project, etc), but helpful input should help make this as useful as
+possible in the longer term.
 
 ## Installing
 
@@ -43,6 +44,11 @@ As well as the library (which I'll give some minimal documentation for below
 -- hopefully more comprehensive documentation will follow eventually), a
 command is also installed called `astare`. This can be used to load up and
 explore a Python source file.
+
+At the moment `astare` has a very simple interface, you run it passing the
+name of a Python file, explore it, quit, load it with a new file, wash,
+rinse, repeat. Yes, something a wee bit more sophisticated is on the cards
+(see the TODO section below).
 
 ## The library
 
@@ -69,8 +75,9 @@ giving a summary of where an `ASTView` is focused.
 
 The way they all work is far from final, so the best way to get an idea of
 how to use them, right now, is to take a look at [the code for
-`astare`](./textual_astview/app/astare.py). There's not a whole lot to it
-(right now anyway) so hopefully it'll be easy enough to follow.
+`astare`](https://github.com/davep/textual-astview/blob/main/textual_astview/app/astare.py).
+There's not a whole lot to it (right now anyway) so hopefully it'll be easy
+enough to follow.
 
 ## TODO
 
