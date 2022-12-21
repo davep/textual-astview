@@ -42,9 +42,8 @@ class Source( SourceInfo, can_focus=True ):
     }
 
     Source > .source--ast-node-highlight {
-        color: white;
-        background: red;
-        text-style: italic;
+        background: #700;
+        text-style: bold italic;
     }
     """
 
