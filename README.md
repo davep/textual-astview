@@ -4,9 +4,7 @@
 
 [![View a YouTube video of textual-astview in action](https://raw.githubusercontent.com/davep/textual-astview/main/img/astview.png)](https://www.youtube.com/watch?v=wQlfhdyIG8Y)
 
-<p style="text-align:center">
-    [View the code in action on YouTube](https://www.youtube.com/watch?v=wQlfhdyIG8Y)
-</p>
+[View the code in action on YouTube](https://www.youtube.com/watch?v=wQlfhdyIG8Y)
 
 ## Introduction
 
