@@ -3,7 +3,7 @@
 ##############################################################################
 # Python imports.
 from pathlib import Path
-from typing  import Any, ClassVar
+from typing  import Any, ClassVar, Final
 
 ##############################################################################
 # Rich imports.
@@ -42,16 +42,20 @@ class Source( SourceInfo, can_focus=True ):
     }
 
     Source > .source--ast-node-highlight {
-        color: white;
-        background: red;
-        text-style: italic;
+        background: #700;
+        text-style: bold italic;
     }
     """
 
-    def __init__( self, source: Path, *args: Any, **kwargs: Any ) -> None:
+    DEFAULT_THEME: Final = "github-dark"
+    """str: The default theme to use for the source."""
+
+    def __init__( self, source: Path, *args: Any, theme: str=DEFAULT_THEME, **kwargs: Any ) -> None:
         """Initialise the source viewing widget."""
         super().__init__( *args, **kwargs )
-        self._source = Syntax.from_path( str( source ), line_numbers=True, lexer="python" )
+        self._source = Syntax.from_path(
+            str( source ), line_numbers=True, lexer="python", theme=theme
+        )
 
     def compose( self ) -> ComposeResult:
         """Compose the source display.

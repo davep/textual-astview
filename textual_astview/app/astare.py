@@ -7,6 +7,10 @@ from typing  import Any
 from pathlib import Path
 
 ##############################################################################
+# Pygments imports.
+from pygments.styles import get_all_styles
+
+##############################################################################
 # Textual imports.
 from textual.app        import App, ComposeResult
 from textual.screen     import Screen
@@ -41,10 +45,10 @@ class MainDisplay( Screen ):
     ]
     """list[ Bindings ]: The bindings for the main screen."""
 
-    def __init__( self, explore: Path, *args: Any, **kwargs: Any ) -> None:
+    def __init__( self, cli_args: argparse.Namespace, *args: Any, **kwargs: Any ) -> None:
         """Initialise the main screen."""
         super().__init__( *args, **kwargs )
-        self._explore = explore
+        self._args = cli_args
 
     def compose( self ) -> ComposeResult:
         """Compose the main app screen.
@@ -55,8 +59,8 @@ class MainDisplay( Screen ):
         yield Header()
         yield Vertical(
             Horizontal(
-                ASTView( self._explore ),
-                Source( self._explore )
+                ASTView( self._args.file ),
+                Source( self._args.file, theme=self._args.theme )
             ),
             NodeInfo()
         )
@@ -105,14 +109,14 @@ class Astare( App[ None ] ):
     SUB_TITLE = f"A Python AST Explorer ({__version__})"
     """str: The sub title of the app."""
 
-    def __init__( self, explore: Path, *args: Any, **kwargs: Any ) -> None:
+    def __init__( self, cli_args: argparse.Namespace, *args: Any, **kwargs: Any ) -> None:
         """Initialise the app."""
         super().__init__( *args, **kwargs )
-        self._explore = explore
+        self._args = cli_args
 
     def on_mount( self ) -> None:
         """Set up the application on startup."""
-        self.push_screen( MainDisplay( self._explore ) )
+        self.push_screen( MainDisplay( self._args ) )
 
 ##############################################################################
 def py_file( path: str ) -> Path:
@@ -150,6 +154,23 @@ def get_args() -> argparse.Namespace:
         epilog      = f"v{__version__}"
     )
 
+    # Add --theme
+    parser.add_argument(
+        "-t", "--theme",
+        choices = list( get_all_styles() ),
+        metavar = "THEME",
+        default = Source.DEFAULT_THEME,
+        help    = "Set the theme for the source display.",
+    )
+
+    # Add --themes
+    parser.add_argument(
+        "--themes",
+        action  = "version",
+        help    = "List the available theme names.",
+        version = ", ".join( sorted( list( get_all_styles() ) ) )
+    )
+
     # Add --version
     parser.add_argument(
         "-v", "--version",
@@ -167,11 +188,6 @@ def get_args() -> argparse.Namespace:
 ##############################################################################
 def main() -> None:
     """Main entry point for astare."""
-
-    # Parse the arguments.
-    args = get_args()
-
-    # Explore the file.
-    Astare( args.file ).run()
+    Astare( get_args() ).run()
 
 ### astare.py ends here

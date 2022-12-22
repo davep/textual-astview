@@ -86,7 +86,7 @@ play. There's a bunch of stuff I still want to do but it can be out there
 and available and then have this sorted.
 
 - [X] Add some actual error checking around loading the file.
-- [ ] Test on Windows.
+- [X] Test on Windows.
 - [ ] Test on GNU/Linux.
 - [ ] Dial in the colour and style until I'm really happy with it.
   - [ ] Add some styling options for `NodeInfo`.
@@ -100,7 +100,7 @@ and available and then have this sorted.
 - [ ] Allow loading another file without leaving the app.
 - [ ] A more "rainbow" approach to highlighting the source and tree
       position.
-- [ ] Add support for setting the [source style](https://pygments.org/styles/).
+- [X] Add support for setting the [source style](https://pygments.org/styles/).
 - [ ] Add a dark/light mode toggle to `astare`.
 - [ ] Better handle really long "paths" in `NodeInfo`.
 - [ ] In `astare` allow resizing of the panes.
