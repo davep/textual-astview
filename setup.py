@@ -2,12 +2,32 @@
 
 ##############################################################################
 # Python imports.
-from pathlib    import Path
-from setuptools import setup, find_packages
+import re
+from collections import defaultdict
+from pathlib import Path
 
-##############################################################################
-# Import the library itself to pull details out of it.
-import textual_astview
+from setuptools import find_packages, setup
+
+
+PACKAGE = "textual_astview"
+
+
+def load_init(file=Path(f"{PACKAGE}/__init__.py")):
+    source = file.read_text(encoding="utf-8")
+    _var_init = defaultdict(lambda: "")
+
+    match = re.search(r'["]{3}(.*)["]{3}', source)
+    if match:
+        _var_init["__doc__"] = f"{match.groups(0)[0]}"
+
+    match = re.findall(r'([_]{2}[a-z]+[_]{2})\s+=\s+["\']{1}(.+)["\']{1}', source)
+    if match:
+        _var_init.update(dict(match))
+    return _var_init
+
+
+vars_init = load_init()
+
 
 ##############################################################################
 # Work out the location of the README file.
@@ -34,24 +54,24 @@ def long_desc():
 # Perform the setup.
 setup(
 
-    name                          = "textual-astview",
-    version                       = textual_astview.__version__,
-    description                   = str( textual_astview.__doc__ ),
+    name                          = f"{PACKAGE}".replace("_","-"),
+    version                       = vars_init["__version__"],
+    description                   = vars_init["__doc__"],
     long_description              = long_desc(),
     long_description_content_type = "text/markdown",
     url                           = "https://github.com/davep/textual-astview",
-    author                        = textual_astview.__author__,
-    author_email                  = textual_astview.__email__,
-    maintainer                    = textual_astview.__maintainer__,
-    maintainer_email              = textual_astview.__email__,
+    author                        = vars_init["__author__"],
+    author_email                  = vars_init["__email__"],
+    maintainer                    = vars_init["__maintainer__"],
+    maintainer_email              = vars_init["__email__"],
     packages                      = find_packages(),
-    package_data                  = { "textual_astview": [ "py.typed" ] },
+    package_data                  = { f"{PACKAGE}": [ "py.typed" ] },
     include_package_data          = True,
     install_requires              = [ "textual==0.7.0" ],
     python_requires               = ">=3.9",
     keywords                      = "terminal library widget tool ast abstract syntax tree viewer explorer",
     entry_points                  = {
-        "console_scripts": "astare=textual_astview.app.astare:main"
+        f"console_scripts": f"astare={PACKAGE}.app.astare:main"
     },
     license                       = (
         "License :: OSI Approved :: MIT License"
