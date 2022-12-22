@@ -1,6 +1,8 @@
 # textual-astview
 
-![](https://raw.githubusercontent.com/davep/textual-astview/main/img/astview.png)
+[![PyPI version](https://badge.fury.io/py/textual-astview.svg)](https://badge.fury.io/py/textual-astview)
+
+[![View a YouTube video of textual-astview in action](https://raw.githubusercontent.com/davep/textual-astview/main/img/astview.png)](https://www.youtube.com/watch?v=wQlfhdyIG8Y)
 
 ## Introduction
 
