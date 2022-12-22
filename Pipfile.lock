@@ -415,11 +415,11 @@
                 "dev"
             ],
             "hashes": [
-                "sha256:bf96a2d4270e9f34e4d18c499eb99c377d0ab035578984d45e692b9dbef1cf12",
-                "sha256:f7ae3b2726204a62df22798a9d9aa7465ae16e2bb417fa118f4d07bc4723ff4f"
+                "sha256:99543a2900341c010f58aaee004e991e8f8031efa6ed7b1c1acd4abacfe28fec",
+                "sha256:a2cd99f3e5ea8d90db1344e10c5fd7929eb2c2f88a84fb03b2de6b485cf39a1b"
             ],
             "index": "pypi",
-            "version": "==0.7.0"
+            "version": "==0.8.0"
         },
         "yarl": {
             "hashes": [
