@@ -3,6 +3,7 @@
 lib    := textual_astview
 run    := pipenv run
 python := $(run) python
+build  := $(python) -m build
 lint   := $(run) pylint
 mypy   := $(run) mypy
 twine  := $(run) twine
@@ -70,11 +71,11 @@ checkall: lint stricttypecheck # Check all the things
 # Package/publish.
 .PHONY: package
 package:			# Package the library
-	$(python) -m build
+	$(build)
 
 .PHONY: spackage
 spackage:			# Create a source package for the library
-	$(python) -m build --sdist
+	$(build) --sdist
 
 .PHONY: packagecheck
 packagecheck: package		# Check the packaging.
