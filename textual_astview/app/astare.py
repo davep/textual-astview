@@ -129,7 +129,6 @@ class MainDisplay( Screen ):
         # snappy by updating right away.
         self.highlight_node( event.node )
 
-
 ##############################################################################
 class Astare( App[ None ] ):
     """Main Textual application class."""
