@@ -59,7 +59,7 @@ class SourceInfo( Vertical ):
 
     @classmethod
     def path_from( cls, node: ASTNode ) -> Iterator[ str ]:
-        """Generate the path to the roof from the given node.
+        """Generate the path to the root from the given node.
 
         Args:
             node (ASTNode): The AST node to get the path from.
