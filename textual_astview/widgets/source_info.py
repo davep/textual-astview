@@ -3,8 +3,9 @@
 ##############################################################################
 # Python imports.
 import ast
-from typing  import Iterator, Final
-from pathlib import Path
+from typing    import Iterator, Final
+from pathlib   import Path
+from itertools import groupby
 
 ##############################################################################
 # Textual imports.
@@ -82,5 +83,44 @@ class SourceInfo( Vertical ):
         # pylint:disable=protected-access
         if node._parent is not None:
             yield from cls.path_from( node._parent )
+
+    @classmethod
+    def _file_location_path_from( cls, node: ASTNode ) -> Iterator[ tuple[ int, int, int, int ] ]:
+        """Generate a file location path to the root from the given node.
+
+        Args:
+            node (ASTNode): The AST node to get the path from.
+
+        Yields:
+            tuple[ int, int, int, int ]: The file location.
+
+        Note:
+            This is a helper method for the non-internal of the same name.
+        """
+
+        # If this node has location data...
+        if ( location := cls.file_location_of( node ) ) is not None:
+            # ...make that available.
+            yield location
+
+        # Textual's TreeNode doesn't currently allow access to the parent of
+        # a node, so in here we're going to do some sneaky dipping into
+        # internals. Hence:
+        #
+        # pylint:disable=protected-access
+        if node._parent is not None:
+            yield from cls.file_location_path_from( node._parent )
+
+    @classmethod
+    def file_location_path_from( cls, node: ASTNode ) -> Iterator[ tuple[ int, int, int, int ] ]:
+        """Generate a file location path to the root from the given node.
+
+        Args:
+            node (ASTNode): The AST node to get the path from.
+
+        Yields:
+            tuple[ int, int, int, int ]: The file location.
+        """
+        yield from ( pos for pos, _ in groupby( cls._file_location_path_from( node ) ) )
 
 ### source_info.py ends here
