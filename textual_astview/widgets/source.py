@@ -76,7 +76,7 @@ class Source( SourceInfo, can_focus=True ):
             node (ASTNode): The AST node to highlight.
         """
 
-        # Sneaky nuking of any old styles. Rich's `Syntax` doesnt' allow for
+        # Sneaky nuking of any old styles. Rich's `Syntax` doesn't allow for
         # removing any stylized ranges so, other than nuking the while
         # Syntax and generating it again every time (slow!), the only option
         # we've got is to kill the list via an internal.
