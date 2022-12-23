@@ -91,7 +91,7 @@ and available and then have this sorted.
 
 - [X] Add some actual error checking around loading the file.
 - [X] Test on Windows.
-- [ ] Test on GNU/Linux.
+- [X] Test on GNU/Linux.
 - [ ] Dial in the colour and style until I'm really happy with it.
   - [ ] Add some styling options for `NodeInfo`.
   - [ ] Think about which styles should end stay in `DEFAULT_CSS` and which
