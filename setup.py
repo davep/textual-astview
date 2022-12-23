@@ -47,7 +47,7 @@ setup(
     packages                      = find_packages(),
     package_data                  = { "textual_astview": [ "py.typed" ] },
     include_package_data          = True,
-    install_requires              = [ "textual==0.7.0" ],
+    install_requires              = [ "textual==0.8.0" ],
     python_requires               = ">=3.9",
     keywords                      = "terminal library widget tool ast abstract syntax tree viewer explorer",
     entry_points                  = {
