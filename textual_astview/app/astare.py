@@ -3,8 +3,9 @@
 ##############################################################################
 # Python imports.
 import argparse
-from typing  import Any
-from pathlib import Path
+from typing             import Any
+from pathlib            import Path
+from importlib.metadata import version
 
 ##############################################################################
 # Pygments imports.
@@ -176,7 +177,7 @@ def get_args() -> argparse.Namespace:
         "-v", "--version",
         help    = "Show version information.",
         action  = "version",
-        version = f"%(prog)s {__version__}"
+        version = f"%(prog)s {__version__} (Textual v{version( 'textual' )})"
     )
 
     # The reminder is the file to explore.
