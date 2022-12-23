@@ -2,8 +2,9 @@
 
 ##############################################################################
 # Python imports.
-from pathlib import Path
-from typing  import Any, ClassVar, Final
+from pathlib   import Path
+from typing    import Any, ClassVar, Final
+from itertools import islice
 
 ##############################################################################
 # Rich imports.
@@ -26,7 +27,12 @@ class Source( SourceInfo, can_focus=True ):
     """Displays the source code for the file."""
 
     COMPONENT_CLASSES: ClassVar[ set[ str ] ] = {
-        "source--ast-node-highlight"
+        "source--ast-node-highlight",
+        "source--ast-node-highlight-1",
+        "source--ast-node-highlight-2",
+        "source--ast-node-highlight-3",
+        "source--ast-node-highlight-4",
+        "source--ast-node-highlight-5",
     }
     """set[ str ]: Classes that can be used to style the source view."""
 
@@ -44,6 +50,26 @@ class Source( SourceInfo, can_focus=True ):
     Source > .source--ast-node-highlight {
         background: #700;
         text-style: bold italic;
+    }
+
+    Source > .source--ast-node-highlight-1 {
+        background: #660;
+    }
+
+    Source > .source--ast-node-highlight-2 {
+        background: #555;
+    }
+
+    Source > .source--ast-node-highlight-3 {
+        background: #044;
+    }
+
+    Source > .source--ast-node-highlight-4 {
+        background: #003;
+    }
+
+    Source > .source--ast-node-highlight-5 {
+        background: #222;
     }
     """
 
@@ -84,8 +110,22 @@ class Source( SourceInfo, can_focus=True ):
         # pylint:disable=protected-access
         self._source._stylized_ranges = []
 
-        # If the node we're looking at has AST location data...
-        if ( loc := self.file_location_of( node ) ) is not None:
+        # Get the list of unique file locations for all nodes from here,
+        # back up to the top, capping at 6 (the main highlight plus a max of
+        # 5 ancestors).
+        if ( to_highlight := list( islice( self.file_location_path_from( node ), 6 ) ) ):
+
+            # Pull out the main highlight and any ancestors.
+            loc, *ancestors = to_highlight
+
+            # Colour the ancestors first, they're going to be "under" the
+            # main highlight.
+            for rule, ancestor in reversed( list( enumerate( ancestors ) ) ):
+                self._source.stylize_range(
+                    self.get_component_rich_style( f"source--ast-node-highlight-{rule + 1}", partial=True ), ancestor[ :2 ], ancestor[ 2: ]
+                )
+
+            # Now highlight and scroll to the node we're working on.
             self._source.stylize_range(
                 self.get_component_rich_style( "source--ast-node-highlight", partial=True ), loc[ :2 ], loc[ 2: ]
             )
