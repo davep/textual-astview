@@ -16,7 +16,7 @@ from pygments.styles import get_all_styles
 # Textual imports.
 from textual.app        import App, ComposeResult
 from textual.screen     import Screen
-from textual.widgets    import Header, Footer
+from textual.widgets    import Header, Footer, Tree
 from textual.containers import Horizontal, Vertical
 from textual.binding    import Binding
 from textual.timer      import Timer
@@ -102,13 +102,33 @@ class MainDisplay( Screen ):
         """React to a node in the tree being highlighted.
 
         Args:
-            event (Tree.NodeSelected[ Any ]): The event to react to.
+            event (ASTTree.NodeHighlighted): The event to react to.
         """
+        # If there's a refresh pending...
         if self._refresh is not None:
+            # ...stop it.
             await self._refresh.stop()
+        # Book in a fresh refresh the full delay on from this event.
         self._refresh = self.set_timer(
             self.UPDATE_DELAY, partial( self.highlight_node, event.node )
         )
+
+    async def on_tree_node_selected( self, event: Tree.NodeSelected[ Any ] ):
+        """React to a node in the tree being selected.
+
+        Args:
+            event (Tree.NodeSelected[ Any ]): The event to react to.
+        """
+        # If there's a refresh pending...
+        if self._refresh is not None:
+            # ...stop it and nuke all evidence of it.
+            await self._refresh.stop()
+            self._refresh = None
+        # Selected is a mouse click or someone bouncing on the enter key,
+        # there's no point in delaying; so let's make it look a bit more
+        # snappy by updating right away.
+        self.highlight_node( event.node )
+
 
 ##############################################################################
 class Astare( App[ None ] ):
