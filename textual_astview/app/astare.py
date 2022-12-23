@@ -3,9 +3,10 @@
 ##############################################################################
 # Python imports.
 import argparse
-from typing             import Any
+from typing             import Any, Final
 from pathlib            import Path
 from importlib.metadata import version
+from functools          import partial
 
 ##############################################################################
 # Pygments imports.
@@ -18,6 +19,7 @@ from textual.screen     import Screen
 from textual.widgets    import Header, Footer
 from textual.containers import Horizontal, Vertical
 from textual.binding    import Binding
+from textual.timer      import Timer
 
 ##############################################################################
 # Local imports.
@@ -46,10 +48,14 @@ class MainDisplay( Screen ):
     ]
     """list[ Bindings ]: The bindings for the main screen."""
 
+    UPDATE_DELAY: Final = 0.2
+    """float: How long to leave it before updating the highlight in the source."""
+
     def __init__( self, cli_args: argparse.Namespace, *args: Any, **kwargs: Any ) -> None:
         """Initialise the main screen."""
         super().__init__( *args, **kwargs )
-        self._args = cli_args
+        self._args                  = cli_args
+        self._refresh: Timer | None = None
 
     def compose( self ) -> ComposeResult:
         """Compose the main app screen.
@@ -92,13 +98,17 @@ class MainDisplay( Screen ):
         self.query_one( NodeInfo ).show( node )
         self.query_one( Source ).highlight( node )
 
-    def on_astview_node_highlighted( self, event: ASTView.NodeHighlighted ) -> None:
+    async def on_astview_node_highlighted( self, event: ASTView.NodeHighlighted ) -> None:
         """React to a node in the tree being highlighted.
 
         Args:
             event (Tree.NodeSelected[ Any ]): The event to react to.
         """
-        self.highlight_node( event.node )
+        if self._refresh is not None:
+            await self._refresh.stop()
+        self._refresh = self.set_timer(
+            self.UPDATE_DELAY, partial( self.highlight_node, event.node )
+        )
 
 ##############################################################################
 class Astare( App[ None ] ):

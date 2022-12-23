@@ -4,6 +4,16 @@
 
 **Released WiP**
 
+### Changed
+
+- Updated to [Textual
+  0.8.0](https://github.com/Textualize/textual/releases/tag/v0.8.0).
+- The source highlight update on changing the selected node is delayed by a
+  fraction of a second (currently 0.2 seconds), and is cancelled if the node
+  changes within that time. The idea being that it should be faster to move
+  through large files if holding a direction key down.
+  ([#6](https://github.com/davep/textual-astview/issues/6)).
+
 ## v0.2.0
 
 **Released 2022-12-21**
