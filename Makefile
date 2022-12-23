@@ -70,11 +70,11 @@ checkall: lint stricttypecheck # Check all the things
 # Package/publish.
 .PHONY: package
 package:			# Package the library
-	$(python) setup.py bdist_wheel
+	$(python) -m build
 
 .PHONY: spackage
 spackage:			# Create a source package for the library
-	$(python) setup.py sdist
+	$(python) -m build --sdist
 
 .PHONY: packagecheck
 packagecheck: package		# Check the packaging.

@@ -12,6 +12,7 @@ mypy = "*"
 twine = "*"
 vermin = "*"
 types-pygments = "*"
+build = "*"
 
 [requires]
 python_version = "3.11"
