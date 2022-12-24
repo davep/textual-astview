@@ -83,6 +83,13 @@ how to use them, right now, is to take a look at [the code for
 There's not a whole lot to it (right now anyway) so hopefully it'll be easy
 enough to follow.
 
+## Known issues
+
+- The Textual `Tree` widget can get a bit confused about where it's supposed
+  to be drawing when labels get too wide, and/or trees get too deep. This is
+  known and will receive attention soon (likely in the new year -- it's late
+  December 2022 as of the time of noting this).
+
 ## TODO
 
 If you're seeing this that means I decided to release so folk can have a
