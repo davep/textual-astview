@@ -113,10 +113,10 @@ and available and then have this sorted.
   - [ ] Searching.
 - [ ] Extend and test all the styling options.
 - [ ] Allow loading another file without leaving the app.
-- [ ] A more "rainbow" approach to highlighting the source and tree
+- [X] A more "rainbow" approach to highlighting the source and tree
       position.
 - [X] Add support for setting the [source style](https://pygments.org/styles/).
-- [ ] Add a dark/light mode toggle to `astare`.
+- [X] Add a dark/light mode toggle to `astare`.
 - [ ] Better handle really long "paths" in `NodeInfo`.
 - [ ] In `astare` allow resizing of the panes.
 - [ ] Keep on having fun hacking on it.
