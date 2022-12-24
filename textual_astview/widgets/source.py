@@ -53,23 +53,23 @@ class Source( SourceInfo, can_focus=True ):
     }
 
     Source > .source--ast-node-highlight-1 {
-        background: #660;
+        background: #606;
     }
 
     Source > .source--ast-node-highlight-2 {
-        background: #555;
+        background: #055;
     }
 
     Source > .source--ast-node-highlight-3 {
-        background: #044;
+        background: #440;
     }
 
     Source > .source--ast-node-highlight-4 {
-        background: #003;
+        background: #303;
     }
 
     Source > .source--ast-node-highlight-5 {
-        background: #222;
+        background: #333;
     }
     """
 
