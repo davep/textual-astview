@@ -121,7 +121,7 @@ class MainDisplay( Screen ):
             self.UPDATE_DELAY, partial( self.highlight_node, event.node )
         )
 
-    async def on_tree_node_selected( self, event: Tree.NodeSelected[ Any ] ):
+    async def on_tree_node_selected( self, event: Tree.NodeSelected[ Any ] ) -> None:
         """React to a node in the tree being selected.
 
         Args:
