@@ -4,6 +4,10 @@
 
 **Released WiP**
 
+### Added
+
+- Added a simple "rainbow" highlight mode, turned off by default.
+
 ### Changed
 
 - Updated to [Textual
