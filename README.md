@@ -112,7 +112,7 @@ and available and then have this sorted.
   - [ ] Lots of keyboard navigation coverage.
   - [ ] Searching.
 - [ ] Extend and test all the styling options.
-- [ ] Allow loading another file without leaving the app.
+- [X] Allow loading another file without leaving the app.
 - [X] A more "rainbow" approach to highlighting the source and tree
       position.
 - [X] Add support for setting the [source style](https://pygments.org/styles/).

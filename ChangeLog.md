@@ -8,6 +8,9 @@
 
 - Added a simple "rainbow" highlight mode, turned off by default.
 - Added support for dark/light mode toggling.
+- Added the ability to open a new file to view (albeit using a directory
+  browser and only one that can currently see files in the current directory
+  and all children -- a more comprehensive file opening system will follow).
 
 ### Changed
 

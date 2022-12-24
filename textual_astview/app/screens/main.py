@@ -5,6 +5,7 @@
 from typing    import Final, Any, cast, Optional
 from argparse  import Namespace
 from functools import partial
+from pathlib   import Path
 
 ##############################################################################
 # Textual imports.
@@ -13,7 +14,7 @@ from textual.binding    import Binding
 from textual.screen     import Screen
 from textual.reactive   import reactive
 from textual.timer      import Timer
-from textual.widgets    import Header, Footer, Tree
+from textual.widgets    import Header, Footer, Tree, DirectoryTree
 from textual.containers import Horizontal, Vertical
 
 ##############################################################################
@@ -25,6 +26,20 @@ class MainDisplay( Screen ):
     """The main display of the app."""
 
     DEFAULT_CSS = """
+    DirectoryTree {
+        border: solid $primary-background-lighten-2;
+        width: 20%;
+        display: none;
+    }
+
+    DirectoryTree.visible {
+        display: block;
+    }
+
+    DirectoryTree:focus-within {
+        border: double $primary-lighten-2;
+    }
+
     Vertical {
         width: 1fr;
     }
@@ -39,6 +54,7 @@ class MainDisplay( Screen ):
     """
 
     BINDINGS = [
+        Binding( "ctrl+o", "open_new",       "Open" ),
         Binding( "ctrl+r", "toggle_rainbow", "Rainbow" ),
         Binding( "ctrl+d", "toggle_dark",    "Light/Dark" ),
         Binding( "ctrl+q", "app.quit",       "Quit" )
@@ -70,6 +86,7 @@ class MainDisplay( Screen ):
         yield Header()
         yield Vertical(
             Horizontal(
+                DirectoryTree( str( self._args.file.parent ) ),
                 ASTView( self._args.file ),
                 Source(
                     self._args.file,
@@ -81,8 +98,8 @@ class MainDisplay( Screen ):
         )
         yield Footer()
 
-    def on_mount( self ) -> None:
-        """Sort the screen once the DOM is mounted."""
+    def _init_tree( self ) -> None:
+        """Set up the tree view when (re)loaded."""
         view = self.query_one( ASTView )
         view.root.expand()
         # Sadly Textual's TreeNode doesn't allow easy access to the
@@ -96,6 +113,10 @@ class MainDisplay( Screen ):
             if view.root._children[ 0 ]._children:
                 view.root._children[ 0 ]._children[ 0 ].expand()
         view.focus()
+
+    def on_mount( self ) -> None:
+        """Sort the screen once the DOM is mounted."""
+        self._init_tree()
 
     def highlight_node( self, node: ASTNode ) -> None:
         """Update the display to highlight the given node.
@@ -157,5 +178,24 @@ class MainDisplay( Screen ):
         self.app.dark                 = not self.app.dark
         self.query_one( Source ).dark = self.app.dark
         self.highlight_node( cast( ASTNode, self.query_one( ASTView ).cursor_node ) )
+
+    def action_open_new( self ) -> None:
+        """Open a new file for viewing."""
+        opener = self.query_one( DirectoryTree )
+        opener.toggle_class( "visible" )
+        if "visible" in opener.classes:
+            opener.focus()
+
+    async def on_directory_tree_file_selected( self, event: DirectoryTree.FileSelected ) -> None:
+        """React to a file being selected in the directory tree.
+
+        Args:
+            event (DirectoryTree.FileSelected): The file selection event.
+        """
+        await self.query_one( ASTView ).remove()
+        await self.mount( ASTView( Path( event.path ) ), before="Source" )
+        self.query_one( Source ).show_file( Path( event.path ) )
+        self.query_one( DirectoryTree ).set_class( False, "visible" )
+        self._init_tree()
 
 ### main.py ends here

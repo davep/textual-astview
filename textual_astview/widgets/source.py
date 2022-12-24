@@ -122,6 +122,15 @@ class Source( SourceInfo, can_focus=True ):
         """
         self.query_one( Static ).update( self._build_source() )
 
+    def show_file( self, new_file: Path ) -> None:
+        """Show a new file in the widget.
+
+        Args:
+            new_file (Path): The new file to show.
+        """
+        self._source_file = new_file
+        self._populate_source()
+
     def compose( self ) -> ComposeResult:
         """Compose the source display.
 
