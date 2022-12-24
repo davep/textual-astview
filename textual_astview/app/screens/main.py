@@ -2,7 +2,7 @@
 
 ##############################################################################
 # Python imports.
-from typing    import Final, Any, cast
+from typing    import Final, Any, cast, Optional
 from argparse  import Namespace
 from functools import partial
 
@@ -58,8 +58,8 @@ class MainDisplay( Screen ):
             cli_args (Namespace): The command line arguments.
         """
         super().__init__( *args, **kwargs )
-        self._args                  = cli_args
-        self._refresh: Timer | None = None
+        self._args                       = cli_args
+        self._refresh: Optional[ Timer ] = None
 
     def compose( self ) -> ComposeResult:
         """Compose the main app screen.
