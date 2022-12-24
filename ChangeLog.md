@@ -7,6 +7,7 @@
 ### Added
 
 - Added a simple "rainbow" highlight mode, turned off by default.
+- Added support for dark/light mode toggling.
 
 ### Changed
 

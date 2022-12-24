@@ -16,6 +16,7 @@ from textual          import events
 from textual.app      import ComposeResult
 from textual.widgets  import Static
 from textual.geometry import Region
+from textual.reactive import reactive
 
 ##############################################################################
 # Local imports.
@@ -76,15 +77,55 @@ class Source( SourceInfo, can_focus=True ):
     MAX_ANCESTOR: Final = 5
     """int: The maximum number of ancestors that can receive rainbow highlights."""
 
-    DEFAULT_THEME: Final = "github-dark"
-    """str: The default theme to use for the source."""
+    DEFAULT_DARK_THEME: Final = "github-dark"
+    """str: The default dark theme to use for the source."""
 
-    def __init__( self, source: Path, *args: Any, theme: str=DEFAULT_THEME, **kwargs: Any ) -> None:
-        """Initialise the source viewing widget."""
+    DEFAULT_LIGHT_THEME: Final = "xcode"
+    """str: The default light theme to use for the source."""
+
+    dark = reactive( True )
+    """bool: Should the source be shown in a dark theme?"""
+
+    def __init__(
+            self, source: Path, *args: Any,
+            dark_theme: str=DEFAULT_DARK_THEME,
+            light_theme: str=DEFAULT_LIGHT_THEME,
+            **kwargs: Any
+    ) -> None:
+        """Initialise the source viewing widget.
+
+        Args:
+            dark_theme (str, optional): The theme to use for dark mode.
+            light_theme (str, optional)): The theme to use for light mode.
+        """
         super().__init__( *args, **kwargs )
+        self._source_file = source
+        self._dark_theme  = dark_theme
+        self._light_theme = light_theme
+
+    def _build_source( self ) -> Syntax:
+        """Builds a new `Stntax` of the file being viewed.
+
+        Returns:
+            Syntax: The resulting `Syntax` instance.
+
+        Note:
+            This updates `_source`, but also returns is as a kindness.
+        """
         self._source = Syntax.from_path(
-            str( source ), line_numbers=True, lexer="python", theme=theme
+            str( self._source_file ), line_numbers=True, lexer="python",
+            theme=self._dark_theme if self.dark else self._light_theme
         )
+        return self._source
+
+    def _populate_source( self ) -> None:
+        """Repopulate the source display.
+
+        Note:
+            This should only be used when everything about the source has
+            changed.
+        """
+        self.query_one( Static ).update( self._build_source() )
 
     def compose( self ) -> ComposeResult:
         """Compose the source display.
@@ -92,7 +133,19 @@ class Source( SourceInfo, can_focus=True ):
         Returns:
             ComposeResult: The result of composing the source display.
         """
-        yield Static( self._source )
+        yield Static()
+
+    def on_mount( self ) -> None:
+        """Configure the widget after the DOM is up and going."""
+        self._populate_source()
+
+    def watch_dark( self, _: bool ) -> None:
+        """React to our own dark mode toggle.
+
+        Note:
+            This is only here while Textual's `watch` isn't behaving well.
+        """
+        self._populate_source()
 
     def on_click( self, _: events.Click ) -> None:
         """React to a mouse click."""

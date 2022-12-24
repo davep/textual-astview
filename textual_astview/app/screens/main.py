@@ -40,6 +40,7 @@ class MainDisplay( Screen ):
 
     BINDINGS = [
         Binding( "ctrl+r", "toggle_rainbow", "Rainbow" ),
+        Binding( "ctrl+d", "toggle_dark",    "Light/Dark" ),
         Binding( "ctrl+q", "app.quit",       "Quit" )
     ]
     """list[ Bindings ]: The bindings for the main screen."""
@@ -70,7 +71,11 @@ class MainDisplay( Screen ):
         yield Vertical(
             Horizontal(
                 ASTView( self._args.file ),
-                Source( self._args.file, theme=self._args.theme )
+                Source(
+                    self._args.file,
+                    dark_theme  = self._args.dark_theme,
+                    light_theme = self._args.light_theme
+                )
             ),
             NodeInfo()
         )
@@ -146,5 +151,11 @@ class MainDisplay( Screen ):
     def action_toggle_rainbow( self ) -> None:
         """Toggle the rainbow highlight flag."""
         self.rainbow = not self.rainbow
+
+    def action_toggle_dark( self ) -> None:
+        """Toggle daark mode."""
+        self.app.dark                 = not self.app.dark
+        self.query_one( Source ).dark = self.app.dark
+        self.highlight_node( cast( ASTNode, self.query_one( ASTView ).cursor_node ) )
 
 ### main.py ends here

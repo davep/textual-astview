@@ -75,13 +75,22 @@ def get_args() -> argparse.Namespace:
         epilog      = f"v{__version__}"
     )
 
-    # Add --theme
+    # Add --dark-theme
     parser.add_argument(
-        "-t", "--theme",
+        "-t", "--dark-theme",
         choices = list( get_all_styles() ),
         metavar = "THEME",
-        default = Source.DEFAULT_THEME,
-        help    = "Set the theme for the source display.",
+        default = Source.DEFAULT_DARK_THEME,
+        help    = "Set the dark mode theme for the source display.",
+    )
+
+    # Add --light-theme
+    parser.add_argument(
+        "-T", "--light-theme",
+        choices = list( get_all_styles() ),
+        metavar = "THEME",
+        default = Source.DEFAULT_LIGHT_THEME,
+        help    = "Set the light mode theme for the source display.",
     )
 
     # Add --themes

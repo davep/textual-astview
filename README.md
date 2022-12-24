@@ -89,6 +89,10 @@ enough to follow.
   to be drawing when labels get too wide, and/or trees get too deep. This is
   known and will receive attention soon (likely in the new year -- it's late
   December 2022 as of the time of noting this).
+- The `Source` widget doesn't self-handle switches from dark/light mode
+  within a Textual app; this is down to a problem with Textual's `watch`
+  system not quite fully working yet. For now `Source` needs to be told to
+  switch by your own application code.
 
 ## TODO
 
