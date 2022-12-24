@@ -3,7 +3,7 @@
 ##############################################################################
 # Python imports.
 import argparse
-from typing             import Any, Final
+from typing             import Any, Final, cast
 from pathlib            import Path
 from importlib.metadata import version
 from functools          import partial
@@ -20,6 +20,7 @@ from textual.widgets    import Header, Footer, Tree
 from textual.containers import Horizontal, Vertical
 from textual.binding    import Binding
 from textual.timer      import Timer
+from textual.reactive   import reactive
 
 ##############################################################################
 # Local imports.
@@ -44,12 +45,16 @@ class MainDisplay( Screen ):
     """
 
     BINDINGS = [
-        Binding( "ctrl+q", "app.quit", "Quit" )
+        Binding( "ctrl+r", "toggle_rainbow", "Rainbow" ),
+        Binding( "ctrl+q", "app.quit",       "Quit" )
     ]
     """list[ Bindings ]: The bindings for the main screen."""
 
     UPDATE_DELAY: Final = 0.2
     """float: How long to leave it before updating the highlight in the source."""
+
+    rainbow = reactive( False )
+    """bool: Should 'rainbow' highlighting be used for the source?"""
 
     def __init__( self, cli_args: argparse.Namespace, *args: Any, **kwargs: Any ) -> None:
         """Initialise the main screen."""
@@ -96,7 +101,7 @@ class MainDisplay( Screen ):
             node (ASTNode): The node to highlight.
         """
         self.query_one( NodeInfo ).show( node )
-        self.query_one( Source ).highlight( node )
+        self.query_one( Source ).highlight( node, self.rainbow )
 
     async def on_astview_node_highlighted( self, event: ASTView.NodeHighlighted ) -> None:
         """React to a node in the tree being highlighted.
@@ -128,6 +133,21 @@ class MainDisplay( Screen ):
         # there's no point in delaying; so let's make it look a bit more
         # snappy by updating right away.
         self.highlight_node( event.node )
+
+    def watch_rainbow( self, new_value: bool ) -> None:
+        """React to the rainbow flag being changed.
+
+        Args:
+            new_value (bool): The new value for the flag.
+        """
+        self.query_one( Source ).highlight(
+            cast( ASTNode, self.query_one( ASTView ).cursor_node ),
+            new_value
+        )
+
+    def action_toggle_rainbow( self ) -> None:
+        """Toggle the rainbow highlight flag."""
+        self.rainbow = not self.rainbow
 
 ##############################################################################
 class Astare( App[ None ] ):
