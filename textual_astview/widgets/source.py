@@ -28,12 +28,18 @@ class Source( SourceInfo, can_focus=True ):
     """Displays the source code for the file."""
 
     COMPONENT_CLASSES: ClassVar[ set[ str ] ] = {
-        "source--ast-node-highlight",
-        "source--ast-node-highlight-1",
-        "source--ast-node-highlight-2",
-        "source--ast-node-highlight-3",
-        "source--ast-node-highlight-4",
-        "source--ast-node-highlight-5",
+        "source--ast-node-dark-mode-highlight",
+        "source--ast-node-dark-mode-highlight-1",
+        "source--ast-node-dark-mode-highlight-2",
+        "source--ast-node-dark-mode-highlight-3",
+        "source--ast-node-dark-mode-highlight-4",
+        "source--ast-node-dark-mode-highlight-5",
+        "source--ast-node-light-mode-highlight",
+        "source--ast-node-light-mode-highlight-1",
+        "source--ast-node-light-mode-highlight-2",
+        "source--ast-node-light-mode-highlight-3",
+        "source--ast-node-light-mode-highlight-4",
+        "source--ast-node-light-mode-highlight-5",
     }
     """set[ str ]: Classes that can be used to style the source view."""
 
@@ -48,30 +54,19 @@ class Source( SourceInfo, can_focus=True ):
         border: double $primary-lighten-2;
     }
 
-    Source > .source--ast-node-highlight {
-        background: #700;
-        text-style: bold italic;
-    }
+    Source > .source--ast-node-dark-mode-highlight   { background: #700; text-style: bold italic; }
+    Source > .source--ast-node-dark-mode-highlight-1 { background: #606; }
+    Source > .source--ast-node-dark-mode-highlight-2 { background: #055; }
+    Source > .source--ast-node-dark-mode-highlight-3 { background: #440; }
+    Source > .source--ast-node-dark-mode-highlight-4 { background: #303; }
+    Source > .source--ast-node-dark-mode-highlight-5 { background: #333; }
 
-    Source > .source--ast-node-highlight-1 {
-        background: #606;
-    }
-
-    Source > .source--ast-node-highlight-2 {
-        background: #055;
-    }
-
-    Source > .source--ast-node-highlight-3 {
-        background: #440;
-    }
-
-    Source > .source--ast-node-highlight-4 {
-        background: #303;
-    }
-
-    Source > .source--ast-node-highlight-5 {
-        background: #333;
-    }
+    Source > .source--ast-node-light-mode-highlight   { background: #F00; text-style: bold italic; }
+    Source > .source--ast-node-light-mode-highlight-1 { background: #E0E; }
+    Source > .source--ast-node-light-mode-highlight-2 { background: #0DD; }
+    Source > .source--ast-node-light-mode-highlight-3 { background: #CC0; }
+    Source > .source--ast-node-light-mode-highlight-4 { background: #B0B; }
+    Source > .source--ast-node-light-mode-highlight-5 { background: #AAA; }
     """
 
     MAX_ANCESTOR: Final = 5
@@ -151,6 +146,10 @@ class Source( SourceInfo, can_focus=True ):
         """React to a mouse click."""
         self.focus()
 
+    @property
+    def _highlight_style( self ) -> str:
+        return f"source--ast-node-{'dark' if self.dark else 'light'}-mode-highlight"
+
     def _highlight_ancestors( self, node: ASTNode ) -> None:
         """Apply highlighting to location-based ancestors of the given node.
 
@@ -159,7 +158,7 @@ class Source( SourceInfo, can_focus=True ):
         """
         for rule, ancestor in reversed( list( enumerate( islice( self.file_location_path_from( node ), 1, self.MAX_ANCESTOR + 1 ) ) ) ):
             self._source.stylize_range(
-                self.get_component_rich_style( f"source--ast-node-highlight-{rule + 1}", partial=True ), ancestor[ :2 ], ancestor[ 2: ]
+                self.get_component_rich_style( f"{self._highlight_style}-{rule + 1}", partial=True ), ancestor[ :2 ], ancestor[ 2: ]
             )
 
     def highlight( self, node: ASTNode, rainbow: bool=False ) -> None:
@@ -188,7 +187,7 @@ class Source( SourceInfo, can_focus=True ):
         if ( loc := self.file_location_of( node ) ):
             # ...highlight and scroll to it.
             self._source.stylize_range(
-                self.get_component_rich_style( "source--ast-node-highlight", partial=True ), loc[ :2 ], loc[ 2: ]
+                self.get_component_rich_style( self._highlight_style, partial=True ), loc[ :2 ], loc[ 2: ]
             )
             line, _, end_line, _ = loc
             self.scroll_to_region( Region( y=line - 1, height=( end_line - line ) + 1 ) )
