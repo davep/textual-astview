@@ -73,6 +73,9 @@ class Source( SourceInfo, can_focus=True ):
     }
     """
 
+    MAX_ANCESTOR: Final = 5
+    """int: The maximum number of ancestors that can receive rainbow highlights."""
+
     DEFAULT_THEME: Final = "github-dark"
     """str: The default theme to use for the source."""
 
@@ -95,11 +98,23 @@ class Source( SourceInfo, can_focus=True ):
         """React to a mouse click."""
         self.focus()
 
-    def highlight( self, node: ASTNode ) -> None:
+    def _highlight_ancestors( self, node: ASTNode ) -> None:
+        """Apply highlighting to location-based ancestors of the given node.
+
+        Args:
+            node (ASTNode): The node to find the ancestors of.
+        """
+        for rule, ancestor in reversed( list( enumerate( islice( self.file_location_path_from( node ), 1, self.MAX_ANCESTOR + 1 ) ) ) ):
+            self._source.stylize_range(
+                self.get_component_rich_style( f"source--ast-node-highlight-{rule + 1}", partial=True ), ancestor[ :2 ], ancestor[ 2: ]
+            )
+
+    def highlight( self, node: ASTNode, rainbow: bool=False ) -> None:
         """Highlight the given AST data in the source.
 
         Args:
             node (ASTNode): The AST node to highlight.
+            rainbow (bool, optional): Use 'rainbow' highlighting?
         """
 
         # Sneaky nuking of any old styles. Rich's `Syntax` doesn't allow for
@@ -110,22 +125,15 @@ class Source( SourceInfo, can_focus=True ):
         # pylint:disable=protected-access
         self._source._stylized_ranges = []
 
-        # Get the list of unique file locations for all nodes from here,
-        # back up to the top, capping at 6 (the main highlight plus a max of
-        # 5 ancestors).
-        if ( to_highlight := list( islice( self.file_location_path_from( node ), 6 ) ) ):
+        # If rainbow highlighting is in effect, let's style the ancestors
+        # first, so the current highlight is always at the top of the
+        # styles.
+        if rainbow:
+            self._highlight_ancestors( node )
 
-            # Pull out the main highlight and any ancestors.
-            loc, *ancestors = to_highlight
-
-            # Colour the ancestors first, they're going to be "under" the
-            # main highlight.
-            for rule, ancestor in reversed( list( enumerate( ancestors ) ) ):
-                self._source.stylize_range(
-                    self.get_component_rich_style( f"source--ast-node-highlight-{rule + 1}", partial=True ), ancestor[ :2 ], ancestor[ 2: ]
-                )
-
-            # Now highlight and scroll to the node we're working on.
+        # If the current node has a file location...
+        if ( loc := self.file_location_of( node ) ):
+            # ...highlight and scroll to it.
             self._source.stylize_range(
                 self.get_component_rich_style( "source--ast-node-highlight", partial=True ), loc[ :2 ], loc[ 2: ]
             )
