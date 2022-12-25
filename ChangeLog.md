@@ -1,5 +1,11 @@
 # textual-astview ChangeLog
 
+## v0.4.0
+
+**Released WiP**
+
+- Work in progress.
+
 ## v0.3.0
 
 **Released 2022-12-25**
