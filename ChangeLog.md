@@ -2,7 +2,7 @@
 
 ## v0.3.0
 
-**Released WiP**
+**Released 2022-12-25**
 
 ### Added
 
