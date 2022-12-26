@@ -140,7 +140,7 @@ class MainDisplay( Screen ):
 
     def on_mount( self ) -> None:
         """Sort the screen once the DOM is mounted."""
-        if self.query( ASTNode ):
+        if self.query( ASTView ):
             self._init_tree()
         else:
             self.query_one( DirectoryTree ).focus()
