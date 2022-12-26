@@ -2,7 +2,7 @@
 
 ## v0.4.0
 
-**Released WiP**
+**Released 2022-12-26**
 
 ### Changed
 
@@ -11,6 +11,11 @@
   shown.
 - Passing a directory on the command line of `astare` will show a file
   selection tree to start with.
+
+### Fixed
+
+- `astare` should run with Python 3.9 now (before now it was only good on
+  3.10 or later).
 
 ## v0.3.0
 
