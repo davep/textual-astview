@@ -1,6 +1,10 @@
 """A base class for widgets that show information about the source."""
 
 ##############################################################################
+# Backward compatibility.
+from __future__ import annotations
+
+##############################################################################
 # Python imports.
 import ast
 from typing    import Iterator, Final
