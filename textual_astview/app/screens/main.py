@@ -16,6 +16,7 @@ from textual.reactive   import reactive
 from textual.timer      import Timer
 from textual.widgets    import Header, Footer, Tree, DirectoryTree
 from textual.containers import Horizontal, Vertical
+from textual.css.query  import NoMatches
 
 ##############################################################################
 # Local imports.
@@ -191,9 +192,12 @@ class MainDisplay( Screen ):
         Args:
             new_value (bool): The new value for the flag.
         """
-        self.query_one( Source ).highlight(
-            cast( ASTNode, self.query_one( ASTView ).cursor_node ), new_value
-        )
+        try:
+            self.query_one( Source ).highlight(
+                cast( ASTNode, self.query_one( ASTView ).cursor_node ), new_value
+            )
+        except NoMatches:
+            pass
 
     def action_toggle_rainbow( self ) -> None:
         """Toggle the rainbow highlight flag."""
@@ -201,9 +205,12 @@ class MainDisplay( Screen ):
 
     def action_toggle_dark( self ) -> None:
         """Toggle daark mode."""
-        self.app.dark                 = not self.app.dark
-        self.query_one( Source ).dark = self.app.dark
-        self.highlight_node( cast( ASTNode, self.query_one( ASTView ).cursor_node ) )
+        self.app.dark = not self.app.dark
+        try:
+            self.query_one( Source ).dark = self.app.dark
+            self.highlight_node( cast( ASTNode, self.query_one( ASTView ).cursor_node ) )
+        except NoMatches:
+            pass
 
     def action_open_new( self ) -> None:
         """Open a new file for viewing."""
