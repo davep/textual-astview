@@ -55,9 +55,6 @@ def py_file( path: str ) -> Path:
     if not candidate.exists():
         raise argparse.ArgumentTypeError( f"{path} does not exist" )
 
-    if not candidate.is_file():
-        raise argparse.ArgumentTypeError( f"{path} is not a file" )
-
     return Path( path )
 
 ##############################################################################
@@ -110,7 +107,13 @@ def get_args() -> argparse.Namespace:
     )
 
     # The reminder is the file to explore.
-    parser.add_argument( "file", help="The file to explore", type=py_file )
+    parser.add_argument(
+        "file",
+        help    = "The file to explore",
+        nargs   = "?",
+        type    = py_file,
+        default = "."
+    )
 
     # Return the arguments.
     return parser.parse_args()

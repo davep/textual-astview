@@ -28,12 +28,19 @@ class MainDisplay( Screen ):
     DEFAULT_CSS = """
     DirectoryTree {
         border: solid $primary-background-lighten-2;
-        width: 20%;
         display: none;
     }
 
     DirectoryTree.visible {
         display: block;
+    }
+
+    DirectiryTree.initial {
+        width: 100%;
+    }
+
+    DirectoryTree.insert {
+        width: 20%;
     }
 
     DirectoryTree:focus-within {
@@ -77,25 +84,42 @@ class MainDisplay( Screen ):
         self._args                       = cli_args
         self._refresh: Optional[ Timer ] = None
 
+    def ast_pane( self ) -> ASTView:
+        """Make an ASTView pane.
+
+        Returns:
+            ASTView: An ASTView pane for viewing the AST.
+        """
+        return ASTView( self._args.file )
+
+    def source_pane( self ) -> Source:
+        """Make a Source pane.
+
+        Returns:
+            Source: A source pane for viewing the code.
+        """
+        return Source(
+            self._args.file,
+            dark_theme  = self._args.dark_theme,
+            light_theme = self._args.light_theme
+        )
+
     def compose( self ) -> ComposeResult:
         """Compose the main app screen.
 
         Returns:
             ComposeResult: The result of composing the screen.
         """
+
+        if self._args.file.is_file():
+            body = [
+                DirectoryTree( str( self._args.file.parent ), classes="insert" ), self.ast_pane(), self.source_pane()
+            ]
+        else:
+            body = [ DirectoryTree( str( self._args.file ), classes="visible initial" ) ]
+
         yield Header()
-        yield Vertical(
-            Horizontal(
-                DirectoryTree( str( self._args.file.parent ) ),
-                ASTView( self._args.file ),
-                Source(
-                    self._args.file,
-                    dark_theme  = self._args.dark_theme,
-                    light_theme = self._args.light_theme
-                )
-            ),
-            NodeInfo()
-        )
+        yield Vertical( Horizontal( *body ), NodeInfo() )
         yield Footer()
 
     def _init_tree( self ) -> None:
@@ -116,7 +140,10 @@ class MainDisplay( Screen ):
 
     def on_mount( self ) -> None:
         """Sort the screen once the DOM is mounted."""
-        self._init_tree()
+        if self.query( ASTNode ):
+            self._init_tree()
+        else:
+            self.query_one( DirectoryTree ).focus()
 
     def highlight_node( self, node: ASTNode ) -> None:
         """Update the display to highlight the given node.
@@ -164,10 +191,13 @@ class MainDisplay( Screen ):
         Args:
             new_value (bool): The new value for the flag.
         """
-        self.query_one( Source ).highlight(
-            cast( ASTNode, self.query_one( ASTView ).cursor_node ),
-            new_value
-        )
+        try:
+            self.query_one( Source ).highlight(
+                cast( ASTNode, self.query_one( ASTView ).cursor_node ),
+                new_value
+            )
+        except:
+            pass
 
     def action_toggle_rainbow( self ) -> None:
         """Toggle the rainbow highlight flag."""
@@ -192,9 +222,15 @@ class MainDisplay( Screen ):
         Args:
             event (DirectoryTree.FileSelected): The file selection event.
         """
-        await self.query_one( ASTView ).remove()
-        await self.mount( ASTView( Path( event.path ) ), before="Source" )
-        self.query_one( Source ).show_file( Path( event.path ) )
+        self._args.file = Path( event.path )
+        if self.query( ASTView ):
+            await self.query_one( ASTView ).remove()
+            await self.mount( self.ast_pane(), before="Source" )
+        else:
+            await self.mount( self.ast_pane(), after="DirectoryTree" )
+            await self.mount( self.source_pane(), after="ASTView" )
+            self.query_one( DirectoryTree ).toggle_class( "initial", "insert" )
+        self.query_one( Source ).show_file( self._args.file )
         self.query_one( DirectoryTree ).set_class( False, "visible" )
         self._init_tree()
 

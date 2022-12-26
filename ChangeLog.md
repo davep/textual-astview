@@ -4,7 +4,13 @@
 
 **Released WiP**
 
-- Work in progress.
+### Changed
+
+- `astare` can now be run up without giving a filename as a parameter, in
+  which case the a file selection tree of the current directory will be
+  shown.
+- Passing a directory on the command line of `astare` will show a file
+  selection tree to start with.
 
 ## v0.3.0
 
