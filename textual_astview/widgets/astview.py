@@ -1,11 +1,15 @@
 """An AST viewer widget for Textual."""
 
 ##############################################################################
+# Backward compatibility.
+from __future__ import annotations
+
+##############################################################################
 # Python imports.
 import ast
 from pathlib   import Path
 from functools import singledispatchmethod
-from typing    import Any, cast, ClassVar
+from typing    import Any, cast, ClassVar, Union, Optional
 
 ##############################################################################
 # Rich imports.
@@ -63,7 +67,7 @@ class ASTView( Tree[ Any ] ):
         # parse in the whole blasted thing up front. I've never found the
         # AST parser to be noticeably slow.
         try:
-            self._module: ast.Module | None = ast.parse( module.read_text() )
+            self._module: Optional[ ast.Module ] = ast.parse( module.read_text() )
         except SyntaxError:
             self._module = None
 
@@ -145,7 +149,7 @@ class ASTView( Tree[ Any ] ):
         # I have it), pyright on the other hand wants me to be
         # super-specific here it seems.
         return (
-            bool( cast( list[ Any ] | tuple[ Any, ... ], value ) ) # type: ignore
+            bool( cast( Union[ list[ Any ], tuple[ Any, ... ] ], value ) ) # type: ignore
             if isinstance( value, ( list, tuple ) ) else True
         )
 
@@ -162,7 +166,7 @@ class ASTView( Tree[ Any ] ):
             # ...let's unroll what's inside, attaching everything to the
             # given node. (the over-protective cast is to keep pyright
             # happy; the ignore if it is to keep mypy happy).
-            for row in cast( list[ Any ] | tuple[ Any, ... ], item ): # type: ignore
+            for row in cast( Union[ list[ Any ], tuple[ Any, ... ] ], item ): # type: ignore
                 self.add( row, to_node )
         else:
             # Not a list or similar, so mark the item as a leaf and str it.
