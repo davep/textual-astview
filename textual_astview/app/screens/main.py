@@ -71,7 +71,7 @@ class MainDisplay( Screen ):
     UPDATE_DELAY: Final = 0.2
     """float: How long to leave it before updating the highlight in the source."""
 
-    rainbow = reactive( False )
+    rainbow = reactive( False, init=False )
     """bool: Should 'rainbow' highlighting be used for the source?"""
 
     def __init__( self, cli_args: Namespace, *args: Any, **kwargs: Any ) -> None:
@@ -191,13 +191,9 @@ class MainDisplay( Screen ):
         Args:
             new_value (bool): The new value for the flag.
         """
-        try:
-            self.query_one( Source ).highlight(
-                cast( ASTNode, self.query_one( ASTView ).cursor_node ),
-                new_value
-            )
-        except:
-            pass
+        self.query_one( Source ).highlight(
+            cast( ASTNode, self.query_one( ASTView ).cursor_node ), new_value
+        )
 
     def action_toggle_rainbow( self ) -> None:
         """Toggle the rainbow highlight flag."""
