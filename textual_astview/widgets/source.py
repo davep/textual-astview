@@ -1,6 +1,10 @@
 """Provides a widget for displaying the source related to the AST view."""
 
 ##############################################################################
+# Backward compatibility.
+from __future__ import annotations
+
+##############################################################################
 # Python imports.
 from pathlib   import Path
 from typing    import Any, ClassVar, Final
