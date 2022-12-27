@@ -49,11 +49,6 @@ As well as the library (which I'll give some minimal documentation for below
 command is also installed called `astare`. This can be used to load up and
 explore a Python source file.
 
-At the moment `astare` has a very simple interface, you run it passing the
-name of a Python file, explore it, quit, load it with a new file, wash,
-rinse, repeat. Yes, something a wee bit more sophisticated is on the cards
-(see the TODO section below).
-
 ## The library
 
 In the library you'll find the following Textual widgets:
