@@ -10,7 +10,7 @@ twine  := $(run) twine
 vermin := $(run) vermin -v --no-parse-comments --backport dataclasses --backport typing --backport argparse --eval-annotations
 
 ##############################################################################
-# Run the plotter.
+# Run the app.
 .PHONY: run
 run:
 	$(python) -m $(lib) $(lib)/widgets/astview.py
