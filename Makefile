@@ -12,15 +12,15 @@ vermin := $(run) vermin -v --no-parse-comments --backport dataclasses --backport
 ##############################################################################
 # Run the app.
 .PHONY: run
-run:
+run:				# Run the app.
 	$(python) -m $(lib) $(lib)/widgets/astview.py
 
 .PHONY: debug
-debug:
+debug:				# Run the app in debug mode (for the console)
 	TEXTUAL=devtools make
 
 .PHONY: console
-console:
+console:			# Run up the Textual development console.
 	$(run) textual console
 
 ##############################################################################
