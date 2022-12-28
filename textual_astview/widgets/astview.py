@@ -9,7 +9,7 @@ from __future__ import annotations
 import ast
 from pathlib   import Path
 from functools import singledispatchmethod
-from typing    import Any, cast, ClassVar, Union, Optional
+from typing    import Any, ClassVar, Optional
 
 ##############################################################################
 # Rich imports.
@@ -134,7 +134,23 @@ class ASTView( Tree[ Any ] ):
         return to_node.add( item, data=item )
 
     @staticmethod
-    def maybe_add( value: Any ) -> bool:
+    def _items( item: Any ) -> list[ Any ] | tuple[ Any, ... ]:
+        """Cast an item to an item collection.
+
+        Args:
+            item (Any): The item to cast to a collection.
+
+        Returns:
+            list[ Any ] | tuple[ Any, ... ]: The item as a collection.
+
+        Note:
+            This is really a do-nothing method, it just helps cast things in
+            a way that should be friendly to as many Pythons as possible.
+        """
+        return item
+
+    @classmethod
+    def maybe_add( cls, value: Any ) -> bool:
         """Does the value look like it should be added to the display?
 
         Args:
@@ -143,15 +159,7 @@ class ASTView( Tree[ Any ] ):
         Returns:
             bool: `True` if the value should be added, `False` if not.
         """
-        # If it's a sequence of some description, and it's empty, perhaps
-        # not add it. Otherwise do add it. Note the over-protective casting;
-        # mypy seems fine about the code without it (and actually moans when
-        # I have it), pyright on the other hand wants me to be
-        # super-specific here it seems.
-        return (
-            bool( cast( Union[ list[ Any ], tuple[ Any, ... ] ], value ) ) # type: ignore
-            if isinstance( value, ( list, tuple ) ) else True
-        )
+        return bool( cls._items( value ) ) if isinstance( value, ( list, tuple ) ) else True
 
     @singledispatchmethod
     def add( self, item: Any, to_node: ASTNode ) -> None:
@@ -164,9 +172,8 @@ class ASTView( Tree[ Any ] ):
         # If we've been given a list or a tuple...
         if isinstance( item, ( list, tuple ) ):
             # ...let's unroll what's inside, attaching everything to the
-            # given node. (the over-protective cast is to keep pyright
-            # happy; the ignore if it is to keep mypy happy).
-            for row in cast( Union[ list[ Any ], tuple[ Any, ... ] ], item ): # type: ignore
+            # given node.
+            for row in self._items( item ):
                 self.add( row, to_node )
         else:
             # Not a list or similar, so mark the item as a leaf and str it.
