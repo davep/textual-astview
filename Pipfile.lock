@@ -415,11 +415,11 @@
                 "dev"
             ],
             "hashes": [
-                "sha256:84b1bcc018938a80b94c9187e2c94f0d051402fd8daa553a1c5888d547531588",
-                "sha256:fcb8c1f25eab04510f00fa125ef1e2ad648b76b7afcbd23da01e405e6fcfd9ba"
+                "sha256:1492e8d35b52584813a8c1e01e921dcee29b782d97352fba74726db74750cbe2",
+                "sha256:59831bd846f9607947723aa5cea9aacd333711e75470d946273d64b594ebbafd"
             ],
             "index": "pypi",
-            "version": "==0.8.1"
+            "version": "==0.8.2"
         },
         "yarl": {
             "hashes": [
@@ -791,7 +791,7 @@
                 "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
                 "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.16.0"
         },
         "tomlkit": {
