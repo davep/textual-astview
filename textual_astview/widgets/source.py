@@ -95,7 +95,7 @@ class Source( SourceInfo, can_focus=True ):
 
         Args:
             dark_theme (str, optional): The theme to use for dark mode.
-            light_theme (str, optional)): The theme to use for light mode.
+            light_theme (str, optional): The theme to use for light mode.
         """
         super().__init__( *args, **kwargs )
         self._source_file = source
