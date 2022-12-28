@@ -49,13 +49,9 @@ def py_file( path: str ) -> Path:
     Returns:
         Path: The `Path` to the file if it looks okay.
     """
-
-    candidate = Path( path )
-
-    if not candidate.exists():
+    if not ( candidate := Path( path ) ).exists():
         raise argparse.ArgumentTypeError( f"{path} does not exist" )
-
-    return Path( path )
+    return candidate
 
 ##############################################################################
 def get_args() -> argparse.Namespace:
