@@ -9,7 +9,7 @@ from __future__ import annotations
 import ast
 from pathlib   import Path
 from functools import singledispatchmethod
-from typing    import Any, ClassVar, Optional
+from typing    import Any, ClassVar, Optional, cast
 
 ##############################################################################
 # Rich imports.
@@ -147,7 +147,7 @@ class ASTView( Tree[ Any ] ):
             This is really a do-nothing method, it just helps cast things in
             a way that should be friendly to as many Pythons as possible.
         """
-        return item
+        return cast( "list[ Any ] | tuple[ Any, ... ]", item )
 
     @classmethod
     def maybe_add( cls, value: Any ) -> bool:
