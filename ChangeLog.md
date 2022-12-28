@@ -14,7 +14,7 @@
 
 ### Fixed
 
-- `astare` should run with Python 3.9 now (before now it was only good on
+- `astare` should run with Python 3.8 now (before now it was only good on
   3.10 or later).
 
 ## v0.3.0
