@@ -226,13 +226,30 @@ class MainDisplay( Screen ):
             event (DirectoryTree.FileSelected): The file selection event.
         """
         self._args.file = Path( event.path )
+
+        # Currently there's no good way to 100% empty out a Textual Tree and
+        # populate it again from scratch. You can clear everything under the
+        # root node, which would almost work, but then there's no public
+        # method of setting a new label or data. Se we need to do a rebuild
+        # dance instead. First, if there's already an ASTView in the DOM...
         if self.query( ASTView ):
+            # ...remove it...
             await self.query_one( ASTView ).remove()
+            # ...and then add a fresh one, splicing it into the display
+            # before the source view.
             await self.mount( self.ast_pane(), before="Source" )
         else:
+            # There's no ASTView. This means we've dome from just showing
+            # just the directory tree and nothing else. In that case we need
+            # to spin up and splice in an ASTView...
             await self.mount( self.ast_pane(), after="DirectoryTree" )
+            # ...and then also a Source view.
             await self.mount( self.source_pane(), after="ASTView" )
+            # Finally: the DirectiryTree will have been in its initial "fill
+            # the display" state; so swap out that class and put it into
+            # "insert me on the left when called upon" state.
             self.query_one( DirectoryTree ).toggle_class( "initial", "insert" )
+
         self.query_one( Source ).show_file( self._args.file )
         self.query_one( DirectoryTree ).set_class( False, "visible" )
         self._init_tree()
