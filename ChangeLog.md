@@ -1,5 +1,14 @@
 # textual-astview ChangeLog
 
+## v0.5.0
+
+**Released WiP**
+
+### Fixed
+
+- `astare` should run with Python 3.8 now (before now it was only good on
+  3.9 or later).
+
 ## v0.4.0
 
 **Released 2022-12-26**
