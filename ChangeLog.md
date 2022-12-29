@@ -1,5 +1,13 @@
 # textual-astview ChangeLog
 
+## v0.5.0
+
+**Released WiP**
+
+### Fixed
+
+- `Source` will now scroll horizontally when needed.
+
 ## v0.4.1
 
 **Released 2022-12-28**

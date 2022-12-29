@@ -52,10 +52,15 @@ class Source( SourceInfo, can_focus=True ):
         height: 1fr;
         border: solid $primary-background-lighten-2;
         background: $panel;
+        overflow: auto;
     }
 
     Source:focus {
         border: double $primary-lighten-2;
+    }
+
+    Source > Static {
+        width: auto;
     }
 
     Source > .source--ast-node-dark-mode-highlight   { background: #700; text-style: bold italic; }
