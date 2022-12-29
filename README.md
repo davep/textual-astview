@@ -110,6 +110,8 @@ and available and then have this sorted.
 - [X] Add a dark/light mode toggle to `astare`.
 - [ ] Better handle really long "paths" in `NodeInfo`.
 - [ ] In `astare` allow resizing of the panes.
+- [ ] Look at making the rainbow highlight in the source more of an "onion"
+      style (try and use indentation columns to show the layers too).
 - [ ] Keep on having fun hacking on it.
 - [ ] Other stuff. I'm sure there's other stuff.
 
