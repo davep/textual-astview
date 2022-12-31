@@ -4,6 +4,10 @@
 
 **Released WiP**
 
+### Changed
+
+- Updated to [Textual 0.9.1](https://github.com/Textualize/textual/releases/tag/v0.9.1).
+
 ### Fixed
 
 - `Source` will now scroll horizontally when needed.
