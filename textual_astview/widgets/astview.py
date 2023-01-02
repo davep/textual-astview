@@ -195,8 +195,7 @@ class ASTView( Tree[ Any ] ):
         if item._fields:
             # ...add them all.
             for field in item._fields:
-                value = getattr( item, field )
-                if self.maybe_add( value ):
+                if self.maybe_add( value := getattr( item, field ) ):
                     self.add( value, self.base_node( field, node ) )
         else:
             # It's a AST item with no fields, so don't allow expanding as
