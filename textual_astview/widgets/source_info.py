@@ -50,16 +50,11 @@ class SourceInfo( Vertical ):
         Returns:
             tuple[ int, int, int, int ] | None: The location if one can be found.
         """
-        # Textual's TreeNode doesn't currently allow access to the parent of
-        # a node, so in here we're going to do some sneaky dipping into
-        # internals. Hence:
-        #
-        # pylint:disable=protected-access
         if cls.has_location( node ):
             if ( item := node.data ) is not None: # Keep type checkers happy.
                 return item.lineno, item.col_offset, item.end_lineno, item.end_col_offset
-        elif node._parent is not None:
-            return cls.file_location_of( node._parent )
+        elif node.parent is not None:
+            return cls.file_location_of( node.parent )
         return None
 
     @classmethod
@@ -80,13 +75,8 @@ class SourceInfo( Vertical ):
         else:
             yield str( node.data )
 
-        # Textual's TreeNode doesn't currently allow access to the parent of
-        # a node, so in here we're going to do some sneaky dipping into
-        # internals. Hence:
-        #
-        # pylint:disable=protected-access
-        if node._parent is not None:
-            yield from cls.path_from( node._parent )
+        if node.parent is not None:
+            yield from cls.path_from( node.parent )
 
     @classmethod
     def _file_location_path_from( cls, node: ASTNode ) -> Iterator[ tuple[ int, int, int, int ] ]:
@@ -107,13 +97,8 @@ class SourceInfo( Vertical ):
             # ...make that available.
             yield location
 
-        # Textual's TreeNode doesn't currently allow access to the parent of
-        # a node, so in here we're going to do some sneaky dipping into
-        # internals. Hence:
-        #
-        # pylint:disable=protected-access
-        if node._parent is not None:
-            yield from cls.file_location_path_from( node._parent )
+        if node.parent is not None:
+            yield from cls.file_location_path_from( node.parent )
 
     @classmethod
     def file_location_path_from( cls, node: ASTNode ) -> Iterator[ tuple[ int, int, int, int ] ]:

@@ -127,16 +127,10 @@ class MainDisplay( Screen ):
         """Set up the tree view when (re)loaded."""
         view = self.query_one( ASTView )
         view.root.expand()
-        # Sadly Textual's TreeNode doesn't allow easy access to the
-        # children, at the moment, so we're going to do a sneaky dip into
-        # the internals here. What I want is to expand up the first couple
-        # of levels in the tree, on startup.
-        #
-        # pylint:disable=protected-access
-        if view.root._children:
-            view.root._children[ 0 ].expand()
-            if view.root._children[ 0 ]._children:
-                view.root._children[ 0 ]._children[ 0 ].expand()
+        if view.root.children:
+            view.root.children[ 0 ].expand()
+            if view.root.children[ 0 ].children:
+                view.root.children[ 0 ].children[ 0 ].expand()
         view.focus()
 
     def on_mount( self ) -> None:
