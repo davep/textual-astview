@@ -159,7 +159,7 @@ class MainDisplay( Screen ):
         self.query_one( NodeInfo ).show( node )
         self.query_one( Source ).highlight( node, self.rainbow )
 
-    async def on_astview_node_highlighted( self, event: ASTView.NodeHighlighted ) -> None:
+    async def on_tree_node_highlighted( self, event: Tree.NodeHighlighted ) -> None:
         """React to a node in the tree being highlighted.
 
         Args:

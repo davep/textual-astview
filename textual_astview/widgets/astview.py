@@ -203,23 +203,4 @@ class ASTView( Tree[ Any ] ):
         self.add( self._module, self.root )
         self.select_node( self.root )
 
-    class NodeHighlighted( Message ):
-        """Message sent when a node is highlighted in the tree view."""
-
-        def __init__( self, sender: "ASTView", node: ASTNode ):
-            """Initialise the node highlighted message."""
-            self.node = node
-            super().__init__( sender )
-
-    def watch_cursor_line( self, previous_line: int, line: int ) -> None:
-        """React to the cursor line changing.
-
-        Args:
-            previous_line (int): The old value.
-            line (int): The new value.
-        """
-        super().watch_cursor_line( previous_line, line )
-        if self.cursor_node is not None:
-            self.emit_no_wait( self.NodeHighlighted( self, self.cursor_node ) )
-
 ### astview.py ends here
