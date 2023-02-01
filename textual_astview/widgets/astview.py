@@ -34,10 +34,6 @@ class ASTView( Tree[ Any ] ):
     """set[ str ]: Classes that can be used to style the AST view."""
 
     DEFAULT_CSS = """
-    ASTView {
-        width: 1fr;
-    }
-
     .astview--def-name {
         text-style: italic;
         color: #888;

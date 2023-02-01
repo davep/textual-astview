@@ -54,18 +54,25 @@ class MainDisplay( Screen ):
 
     ASTView {
         border: solid $primary-background-lighten-2;
+        width: 10fr;
     }
 
     ASTView:focus-within {
         border: double $primary-lighten-2;
     }
+
+    Source {
+        width: 10fr;
+    }
     """
 
     BINDINGS = [
-        Binding( "ctrl+o", "open_new",       "Open" ),
-        Binding( "ctrl+r", "toggle_rainbow", "Rainbow" ),
-        Binding( "ctrl+d", "toggle_dark",    "Light/Dark" ),
-        Binding( "ctrl+q", "app.quit",       "Quit" )
+        Binding( "ctrl+left",  "shrink_left",    "", show=False ),
+        Binding( "ctrl+right", "shrink_right",   "", show=False ),
+        Binding( "ctrl+o",     "open_new",       "Open" ),
+        Binding( "ctrl+r",     "toggle_rainbow", "Rainbow" ),
+        Binding( "ctrl+d",     "toggle_dark",    "Light/Dark" ),
+        Binding( "ctrl+q",     "app.quit",       "Quit" )
     ]
     """list[ Bindings ]: The bindings for the main screen."""
 
@@ -74,6 +81,9 @@ class MainDisplay( Screen ):
 
     rainbow = reactive( False, init=False )
     """bool: Should 'rainbow' highlighting be used for the source?"""
+
+    ast_width: reactive[ int ] = reactive( 10 )
+    """The relative width of the reactive pane."""
 
     def __init__( self, cli_args: Namespace, *args: Any, **kwargs: Any ) -> None:
         """Initialise the main screen.
@@ -212,6 +222,21 @@ class MainDisplay( Screen ):
         opener.toggle_class( "visible" )
         if "visible" in opener.classes:
             opener.focus()
+
+    def watch_ast_width( self ) -> None:
+        """React to the AST view width being changed by the user."""
+        self.query_one( ASTView ).styles.width = f"{self.ast_width}fr"
+        self.query_one( Source ).styles.width = f"{10 + ( 10 - self.ast_width )}fr"
+
+    def action_shrink_left( self ) -> None:
+        """Shrink the left pane in the display."""
+        if self.ast_width > 2:
+            self.ast_width -= 1
+
+    def action_shrink_right( self ) -> None:
+        """Shrink the right pane in the display."""
+        if self.ast_width < 18:
+            self.ast_width += 1
 
     async def on_directory_tree_file_selected( self, event: DirectoryTree.FileSelected ) -> None:
         """React to a file being selected in the directory tree.
