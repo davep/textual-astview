@@ -142,6 +142,7 @@ class MainDisplay( Screen ):
             if view.root.children[ 0 ].children:
                 view.root.children[ 0 ].children[ 0 ].expand()
         view.focus()
+        self.highlight_node( view.root )
 
     def on_mount( self ) -> None:
         """Sort the screen once the DOM is mounted."""
