@@ -19,6 +19,7 @@ from rich.text import Text
 # Textual imports.
 from textual.widgets      import Tree
 from textual.widgets.tree import TreeNode
+from textual.binding      import Binding
 
 ##############################################################################
 ASTNode = TreeNode[ Any ]
@@ -40,6 +41,12 @@ class ASTView( Tree[ Any ] ):
     }
     """
     """str: The default CSS for the component."""
+
+    BINDINGS = [
+        Binding( "ctrl+a", "toggle_all", "Toggle all" ),
+    ]
+    """The bindings for the control."""
+
 
     def __init__( self, module: Path, *args: Any, name_defs: bool=True, **kwargs: Any ) -> None:
         """Initialise the view of the AST for the given module.
@@ -202,5 +209,10 @@ class ASTView( Tree[ Any ] ):
         """Populate the view once we're mounted."""
         self.add( self._module, self.root )
         self.select_node( self.root )
+
+    def action_toggle_all( self ) -> None:
+        """Toggle all the nodes from the selected node down."""
+        if self.cursor_node is not None:
+            self.cursor_node.toggle_all()
 
 ### astview.py ends here
