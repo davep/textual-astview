@@ -2,11 +2,13 @@
 
 ## v0.5.0
 
-**Released WiP**
+**Released 2023-02-16**
 
 ### Changed
 
-- Updated to [Textual 0.9.1](https://github.com/Textualize/textual/releases/tag/v0.9.1).
+- Updated to [Textual 0.11.0](https://github.com/Textualize/textual/releases/tag/v0.11.0).
+- Added a "toggle all" option to the tree.
+- Added support for sizing the panes, with C-left and C-right.
 
 ### Fixed
 
