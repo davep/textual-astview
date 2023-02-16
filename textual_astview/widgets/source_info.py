@@ -24,17 +24,17 @@ class SourceInfo( Vertical ):
     """Base class for information relating to showing source."""
 
     LOCATION_PROPS: Final = ( "lineno", "col_offset", "end_lineno", "end_col_offset" )
-    """tuple[ str, ...]: The properties needed to highlight a location in the source."""
+    """The properties needed to highlight a location in the source."""
 
     @classmethod
     def has_location( cls, node: ASTNode ) -> bool:
         """Does the given node  have location information?
 
         Args:
-            item (ASTNode): Am item from the AST.
+            item: Am item from the AST.
 
         Returns:
-            bool: `True` if the item has location information, otherwise `False.
+            `True` if the item has location information, otherwise `False.
         """
         return isinstance( node.data, ast.AST ) and all(
             hasattr( node.data, prop ) for prop in cls.LOCATION_PROPS
@@ -45,10 +45,10 @@ class SourceInfo( Vertical ):
         """Find the file location of the given node.
 
         Args:
-            node (ASTNode): The node in the tree to find the location of.
+            node: The node in the tree to find the location of.
 
         Returns:
-            tuple[ int, int, int, int ] | None: The location if one can be found.
+            The location if one can be found, or `None`.
         """
         if cls.has_location( node ):
             if ( item := node.data ) is not None: # Keep type checkers happy.
@@ -62,10 +62,10 @@ class SourceInfo( Vertical ):
         """Generate the path to the root from the given node.
 
         Args:
-            node (ASTNode): The AST node to get the path from.
+            node: The AST node to get the path from.
 
         Yields:
-            str: The text for the node.
+            The text for the node.
         """
 
         if isinstance( node.data, ast.AST ):
@@ -83,10 +83,10 @@ class SourceInfo( Vertical ):
         """Generate a file location path to the root from the given node.
 
         Args:
-            node (ASTNode): The AST node to get the path from.
+            node: The AST node to get the path from.
 
         Yields:
-            tuple[ int, int, int, int ]: The file location.
+            The file location.
 
         Note:
             This is a helper method for the non-internal of the same name.
@@ -105,10 +105,10 @@ class SourceInfo( Vertical ):
         """Generate a file location path to the root from the given node.
 
         Args:
-            node (ASTNode): The AST node to get the path from.
+            node: The AST node to get the path from.
 
         Yields:
-            tuple[ int, int, int, int ]: The file location.
+            The file location.
         """
         yield from ( pos for pos, _ in groupby( cls._file_location_path_from( node ) ) )
 

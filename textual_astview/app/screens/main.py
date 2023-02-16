@@ -74,13 +74,13 @@ class MainDisplay( Screen ):
         Binding( "ctrl+d",     "toggle_dark",    "Light/Dark" ),
         Binding( "ctrl+q",     "app.quit",       "Quit" )
     ]
-    """list[ Bindings ]: The bindings for the main screen."""
+    """The bindings for the main screen."""
 
     UPDATE_DELAY: Final = 0.2
-    """float: How long to leave it before updating the highlight in the source."""
+    """How long to leave it before updating the highlight in the source."""
 
     rainbow = reactive( False, init=False )
-    """bool: Should 'rainbow' highlighting be used for the source?"""
+    """Should 'rainbow' highlighting be used for the source?"""
 
     ast_width: reactive[ int ] = reactive( 10 )
     """The relative width of the reactive pane."""
@@ -89,7 +89,7 @@ class MainDisplay( Screen ):
         """Initialise the main screen.
 
         Args:
-            cli_args (Namespace): The command line arguments.
+            cli_args: The command line arguments.
         """
         super().__init__( *args, **kwargs )
         self._args                       = cli_args
@@ -99,7 +99,7 @@ class MainDisplay( Screen ):
         """Make an ASTView pane.
 
         Returns:
-            ASTView: An ASTView pane for viewing the AST.
+            An ASTView pane for viewing the AST.
         """
         return ASTView( self._args.file )
 
@@ -107,7 +107,7 @@ class MainDisplay( Screen ):
         """Make a Source pane.
 
         Returns:
-            Source: A source pane for viewing the code.
+            A source pane for viewing the code.
         """
         return Source(
             self._args.file,
@@ -119,7 +119,7 @@ class MainDisplay( Screen ):
         """Compose the main app screen.
 
         Returns:
-            ComposeResult: The result of composing the screen.
+            The result of composing the screen.
         """
 
         if self._args.file.is_file():
@@ -155,7 +155,7 @@ class MainDisplay( Screen ):
         """Update the display to highlight the given node.
 
         Args:
-            node (ASTNode): The node to highlight.
+            node: The node to highlight.
         """
         self.query_one( NodeInfo ).show( node )
         self.query_one( Source ).highlight( node, self.rainbow )
@@ -164,7 +164,7 @@ class MainDisplay( Screen ):
         """React to a node in the tree being highlighted.
 
         Args:
-            event (ASTTree.NodeHighlighted): The event to react to.
+            event: The event to react to.
         """
         if isinstance( event.sender, ASTView ):
             # If there's a refresh pending...
@@ -180,7 +180,7 @@ class MainDisplay( Screen ):
         """React to a node in the tree being selected.
 
         Args:
-            event (Tree.NodeSelected): The event to react to.
+            event: The event to react to.
         """
         if isinstance( event.sender, ASTView ):
             # If there's a refresh pending...
@@ -197,7 +197,7 @@ class MainDisplay( Screen ):
         """React to the rainbow flag being changed.
 
         Args:
-            new_value (bool): The new value for the flag.
+            new_value: The new value for the flag.
         """
         try:
             self.query_one( Source ).highlight(
@@ -245,7 +245,7 @@ class MainDisplay( Screen ):
         """React to a file being selected in the directory tree.
 
         Args:
-            event (DirectoryTree.FileSelected): The file selection event.
+            event: The file selection event.
         """
         self._args.file = Path( event.path )
 

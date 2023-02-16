@@ -36,7 +36,7 @@ class NodeInfo( SourceInfo ):
         """Compose the main app screen.
 
         Returns:
-            ComposeResult: The result of composing the screen.
+            The result of composing the screen.
         """
         yield Static( id="--node-path")
         yield Static( id="--node-location" )
@@ -45,7 +45,7 @@ class NodeInfo( SourceInfo ):
         """Show some details for the given node.
 
         Args:
-            node (ASTNode): The node to show the data for.
+            node: The node to show the data for.
         """
         if ( loc := self.file_location_of( node ) ) is not None:
             self.query_one( "#--node-location", Static ).update(

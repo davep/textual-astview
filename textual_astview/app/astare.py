@@ -25,10 +25,10 @@ class Astare( App[ None ] ):
     """Main Textual application class."""
 
     TITLE = "astare"
-    """str: The main title of the app."""
+    """The main title of the app."""
 
     SUB_TITLE = f"A Python AST Explorer ({__version__})"
-    """str: The sub title of the app."""
+    """The sub title of the app."""
 
     def __init__( self, cli_args: argparse.Namespace, *args: Any, **kwargs: Any ) -> None:
         """Initialise the app."""
@@ -44,10 +44,10 @@ def py_file( path: str ) -> Path:
     """Check that the file we're being asked to look at seems fine
 
     Args:
-        path (str): The argument.
+        path: The argument.
 
     Returns:
-        Path: The `Path` to the file if it looks okay.
+        The `Path` to the file if it looks okay.
     """
     if not ( candidate := Path( path ) ).exists():
         raise argparse.ArgumentTypeError( f"{path} does not exist" )
@@ -58,7 +58,7 @@ def get_args() -> argparse.Namespace:
     """Get the command line arguments.
 
     Returns:
-        argparse.Namespace: The arguments.
+        The arguments.
     """
 
     # Create the argument parser object.

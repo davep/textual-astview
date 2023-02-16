@@ -45,7 +45,7 @@ class Source( SourceInfo, can_focus=True ):
         "source--ast-node-light-mode-highlight-4",
         "source--ast-node-light-mode-highlight-5",
     }
-    """set[ str ]: Classes that can be used to style the source view."""
+    """Classes that can be used to style the source view."""
 
     DEFAULT_CSS = """
     Source {
@@ -79,16 +79,16 @@ class Source( SourceInfo, can_focus=True ):
     """
 
     MAX_ANCESTOR: Final = 5
-    """int: The maximum number of ancestors that can receive rainbow highlights."""
+    """The maximum number of ancestors that can receive rainbow highlights."""
 
     DEFAULT_DARK_THEME: Final = "github-dark"
-    """str: The default dark theme to use for the source."""
+    """The default dark theme to use for the source."""
 
     DEFAULT_LIGHT_THEME: Final = "xcode"
-    """str: The default light theme to use for the source."""
+    """The default light theme to use for the source."""
 
     dark = reactive( True )
-    """bool: Should the source be shown in a dark theme?"""
+    """Should the source be shown in a dark theme?"""
 
     def __init__(
             self, source: Path, *args: Any,
@@ -99,8 +99,8 @@ class Source( SourceInfo, can_focus=True ):
         """Initialise the source viewing widget.
 
         Args:
-            dark_theme (str, optional): The theme to use for dark mode.
-            light_theme (str, optional): The theme to use for light mode.
+            dark_theme (optional): The theme to use for dark mode.
+            light_theme (optional): The theme to use for light mode.
         """
         super().__init__( *args, **kwargs )
         self._source_file = source
@@ -111,7 +111,7 @@ class Source( SourceInfo, can_focus=True ):
         """Builds a new `Stntax` of the file being viewed.
 
         Returns:
-            Syntax: The resulting `Syntax` instance.
+            The resulting `Syntax` instance.
 
         Note:
             This updates `_source`, but also returns is as a kindness.
@@ -135,7 +135,7 @@ class Source( SourceInfo, can_focus=True ):
         """Show a new file in the widget.
 
         Args:
-            new_file (Path): The new file to show.
+            new_file: The new file to show.
         """
         self._source_file = new_file
         self._populate_source()
@@ -144,7 +144,7 @@ class Source( SourceInfo, can_focus=True ):
         """Compose the source display.
 
         Returns:
-            ComposeResult: The result of composing the source display.
+            The result of composing the source display.
         """
         yield Static()
 
@@ -172,7 +172,7 @@ class Source( SourceInfo, can_focus=True ):
         """Apply highlighting to location-based ancestors of the given node.
 
         Args:
-            node (ASTNode): The node to find the ancestors of.
+            node: The node to find the ancestors of.
         """
         for rule, ancestor in reversed( list( enumerate( islice( self.file_location_path_from( node ), 1, self.MAX_ANCESTOR + 1 ) ) ) ):
             self._source.stylize_range(
@@ -183,8 +183,8 @@ class Source( SourceInfo, can_focus=True ):
         """Highlight the given AST data in the source.
 
         Args:
-            node (ASTNode): The AST node to highlight.
-            rainbow (bool, optional): Use 'rainbow' highlighting?
+            node: The AST node to highlight.
+            rainbow (optional): Use 'rainbow' highlighting?
         """
 
         # Sneaky nuking of any old styles. Rich's `Syntax` doesn't allow for

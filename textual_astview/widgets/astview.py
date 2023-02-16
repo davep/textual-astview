@@ -32,7 +32,7 @@ class ASTView( Tree[ Any ] ):
     COMPONENT_CLASSES: ClassVar[ set[ str ] ] = Tree.COMPONENT_CLASSES | {
         "astview--def-name"
     }
-    """set[ str ]: Classes that can be used to style the AST view."""
+    """Classes that can be used to style the AST view."""
 
     DEFAULT_CSS = """
     .astview--def-name {
@@ -40,7 +40,7 @@ class ASTView( Tree[ Any ] ):
         color: #888;
     }
     """
-    """str: The default CSS for the component."""
+    """The default CSS for the component."""
 
     BINDINGS = [
         Binding( "ctrl+a", "toggle_all", "Toggle all" ),
@@ -52,8 +52,8 @@ class ASTView( Tree[ Any ] ):
         """Initialise the view of the AST for the given module.
 
         Args:
-            module (Path): The path of the module to show.
-            name_defs (bool, optional): Include names in definition-type nodes?
+            module: The path of the module to show.
+            name_defs (optional): Include names in definition-type nodes?
 
         Note:
             By default function and class definition nodes will
@@ -90,11 +90,11 @@ class ASTView( Tree[ Any ] ):
         """Attach a base node.
 
         Args:
-            item (Any): The item to associate with the node.
-            to_node (ASTNode): The node to attach to.
+            item: The item to associate with the node.
+            to_node: The node to attach to.
 
         Returns:
-            ASTNode: The new node.
+            The new node.
         """
         return to_node.add( item.__class__.__name__, data=item )
 
@@ -103,11 +103,11 @@ class ASTView( Tree[ Any ] ):
         """Attach a base node.
 
         Args:
-            item (str): The item to associate with the node.
-            to_node (ASTNode): The node to attach to.
+            item: The item to associate with the node.
+            to_node: The node to attach to.
 
         Returns:
-            ASTNode: The new node.
+            The new node.
         """
         # For most AST types the label will just be the class name.
         label = Text( item.__class__.__name__ )
@@ -128,11 +128,11 @@ class ASTView( Tree[ Any ] ):
         """Attach a base node.
 
         Args:
-            item (str): The item to associate with the node.
-            to_node (ASTNode): The node to attach to.
+            item: The item to associate with the node.
+            to_node: The node to attach to.
 
         Returns:
-            ASTNode: The new node.
+            The new node.
         """
         return to_node.add( item, data=item )
 
@@ -141,10 +141,10 @@ class ASTView( Tree[ Any ] ):
         """Cast an item to an item collection.
 
         Args:
-            item (Any): The item to cast to a collection.
+            item: The item to cast to a collection.
 
         Returns:
-            list[ Any ] | tuple[ Any, ... ]: The item as a collection.
+            The item as a collection.
 
         Note:
             This is really a do-nothing method, it just helps cast things in
@@ -157,10 +157,10 @@ class ASTView( Tree[ Any ] ):
         """Does the value look like it should be added to the display?
 
         Args:
-            value (Any): The value to consider.
+            value: The value to consider.
 
         Returns:
-            bool: `True` if the value should be added, `False` if not.
+            `True` if the value should be added, `False` if not.
         """
         return bool( cls._items( value ) ) if isinstance( value, ( list, tuple ) ) else True
 
@@ -169,8 +169,8 @@ class ASTView( Tree[ Any ] ):
         """Add an entry to the tree.
 
         Args:
-            item (Any): The ast entry to add.
-            to_node (ASTNode): The node to add to.
+            itemThe ast entry to add.
+            to_nodeThe node to add to.
         """
         # If we've been given a list or a tuple...
         if isinstance( item, ( list, tuple ) ):
@@ -187,8 +187,8 @@ class ASTView( Tree[ Any ] ):
         """Add an AST item to the tree.
 
         Args:
-            item (ast.AST): The ast entry to add.
-            to_node (ASTNode): The node to add to.
+            item: The ast entry to add.
+            to_node: The node to add to.
         """
 
         # Create a new node to hand stuff off.
