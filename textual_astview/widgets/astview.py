@@ -17,8 +17,9 @@ from rich.text import Text
 
 ##############################################################################
 # Textual imports.
-from textual.widgets import Tree, TreeNode
-from textual.message import Message
+from textual.widgets      import Tree
+from textual.widgets.tree import TreeNode
+from textual.message      import Message
 
 ##############################################################################
 ASTNode = TreeNode[ Any ]
