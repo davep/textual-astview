@@ -1,5 +1,13 @@
 # textual-astview ChangeLog
 
+## v?.?.?
+
+**Released: WiP**
+
+# Changed
+
+- Updated to [Textual 0.22.0](https://github.com/Textualize/textual/releases/tag/v0.22.0).
+
 ## v0.5.0
 
 **Released 2023-02-16**
