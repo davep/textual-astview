@@ -101,7 +101,7 @@ class MainDisplay( Screen ):
         Returns:
             An ASTView pane for viewing the AST.
         """
-        return ASTView( self._args.file )
+        return ASTView( self._args.file, id="ast-view" )
 
     def source_pane( self ) -> Source:
         """Make a Source pane.
@@ -166,6 +166,13 @@ class MainDisplay( Screen ):
         Args:
             event: The event to react to.
         """
+        # Only handle highlight for the AST tree view. Note that for the
+        # moment I have to dive into the private attributes of the node to
+        # figure out which tree is sending the message.
+        #
+        # https://github.com/Textualize/textual/issues/2413
+        if event.node._tree.id != "ast-view":
+            return
         # If there's a refresh pending...
         if self._refresh is not None:
             # ...stop it.
@@ -181,6 +188,13 @@ class MainDisplay( Screen ):
         Args:
             event: The event to react to.
         """
+        # Only handle selected for the AST tree view. Note that for the
+        # moment I have to dive into the private attributes of the node to
+        # figure out which tree is sending the message.
+        #
+        # https://github.com/Textualize/textual/issues/2413
+        if event.node._tree.id != "ast-view":
+            return
         # If there's a refresh pending...
         if self._refresh is not None:
             # ...stop it and nuke all evidence of it.
