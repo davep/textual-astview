@@ -160,38 +160,36 @@ class MainDisplay( Screen ):
         self.query_one( NodeInfo ).show( node )
         self.query_one( Source ).highlight( node, self.rainbow )
 
-    async def on_tree_node_highlighted( self, event: Tree.NodeHighlighted ) -> None:
+    def on_tree_node_highlighted( self, event: Tree.NodeHighlighted ) -> None:
         """React to a node in the tree being highlighted.
 
         Args:
             event: The event to react to.
         """
-        if isinstance( event.sender, ASTView ):
-            # If there's a refresh pending...
-            if self._refresh is not None:
-                # ...stop it.
-                await self._refresh.stop()
-            # Book in a fresh refresh the full delay on from this event.
-            self._refresh = self.set_timer(
-                self.UPDATE_DELAY, partial( self.highlight_node, event.node )
-            )
+        # If there's a refresh pending...
+        if self._refresh is not None:
+            # ...stop it.
+            self._refresh.stop()
+        # Book in a fresh refresh the full delay on from this event.
+        self._refresh = self.set_timer(
+            self.UPDATE_DELAY, partial( self.highlight_node, event.node )
+        )
 
-    async def on_tree_node_selected( self, event: Tree.NodeSelected ) -> None:
+    def on_tree_node_selected( self, event: Tree.NodeSelected ) -> None:
         """React to a node in the tree being selected.
 
         Args:
             event: The event to react to.
         """
-        if isinstance( event.sender, ASTView ):
-            # If there's a refresh pending...
-            if self._refresh is not None:
-                # ...stop it and nuke all evidence of it.
-                await self._refresh.stop()
-                self._refresh = None
-            # Selected is a mouse click or someone bouncing on the enter key,
-            # there's no point in delaying; so let's make it look a bit more
-            # snappy by updating right away.
-            self.highlight_node( event.node )
+        # If there's a refresh pending...
+        if self._refresh is not None:
+            # ...stop it and nuke all evidence of it.
+            self._refresh.stop()
+            self._refresh = None
+        # Selected is a mouse click or someone bouncing on the enter key,
+        # there's no point in delaying; so let's make it look a bit more
+        # snappy by updating right away.
+        self.highlight_node( event.node )
 
     def watch_rainbow( self, new_value: bool ) -> None:
         """React to the rainbow flag being changed.
