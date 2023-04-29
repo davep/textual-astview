@@ -169,9 +169,7 @@ class MainDisplay( Screen ):
         # Only handle highlight for the AST tree view. Note that for the
         # moment I have to dive into the private attributes of the node to
         # figure out which tree is sending the message.
-        #
-        # https://github.com/Textualize/textual/issues/2413
-        if event.node._tree.id != "ast-view":
+        if event.node.tree.id != "ast-view":
             return
         # If there's a refresh pending...
         if self._refresh is not None:
@@ -191,9 +189,7 @@ class MainDisplay( Screen ):
         # Only handle selected for the AST tree view. Note that for the
         # moment I have to dive into the private attributes of the node to
         # figure out which tree is sending the message.
-        #
-        # https://github.com/Textualize/textual/issues/2413
-        if event.node._tree.id != "ast-view":
+        if event.node.tree.id != "ast-view":
             return
         # If there's a refresh pending...
         if self._refresh is not None:
