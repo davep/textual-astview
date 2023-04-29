@@ -1,8 +1,8 @@
 # textual-astview ChangeLog
 
-## v?.?.?
+## v0.6.0
 
-**Released: WiP**
+**Released: 2023-04-29**
 
 # Changed
 
