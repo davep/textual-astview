@@ -82,7 +82,7 @@ class MainDisplay( Screen ):
     rainbow = reactive( False, init=False )
     """Should 'rainbow' highlighting be used for the source?"""
 
-    ast_width: reactive[ int ] = reactive( 10 )
+    ast_width: reactive[ int ] = reactive( 10, init=False )
     """The relative width of the reactive pane."""
 
     def __init__( self, cli_args: Namespace, *args: Any, **kwargs: Any ) -> None:
