@@ -1,10 +1,18 @@
 # textual-astview ChangeLog
 
+## v0.6.1
+
+**Released: 2023-04-29**
+
+### Fixed
+
+- Fixed a crash when running up with no filename on the command line.
+
 ## v0.6.0
 
 **Released: 2023-04-29**
 
-# Changed
+### Changed
 
 - Updated to [Textual 0.22.0](https://github.com/Textualize/textual/releases/tag/v0.22.0).
 
