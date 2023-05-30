@@ -14,9 +14,13 @@ from textual.binding    import Binding
 from textual.screen     import Screen
 from textual.reactive   import reactive
 from textual.timer      import Timer
-from textual.widgets    import Header, Footer, Tree, DirectoryTree
+from textual.widgets    import Header, Footer, Tree
 from textual.containers import Horizontal, Vertical
 from textual.css.query  import NoMatches
+
+##############################################################################
+# Other imports.
+from textual_fspicker import FileOpen, Filters
 
 ##############################################################################
 # Local imports.
@@ -27,27 +31,6 @@ class MainDisplay( Screen ):
     """The main display of the app."""
 
     DEFAULT_CSS = """
-    DirectoryTree {
-        border: solid $primary-background-lighten-2;
-        display: none;
-    }
-
-    DirectoryTree.visible {
-        display: block;
-    }
-
-    DirectiryTree.initial {
-        width: 100%;
-    }
-
-    DirectoryTree.insert {
-        width: 20%;
-    }
-
-    DirectoryTree:focus-within {
-        border: double $primary-lighten-2;
-    }
-
     Vertical {
         width: 1fr;
     }
@@ -121,16 +104,12 @@ class MainDisplay( Screen ):
         Returns:
             The result of composing the screen.
         """
-
-        if self._args.file.is_file():
-            body = [
-                DirectoryTree( str( self._args.file.parent ), classes="insert" ), self.ast_pane(), self.source_pane()
-            ]
-        else:
-            body = [ DirectoryTree( str( self._args.file ), classes="visible initial" ) ]
-
         yield Header()
-        yield Vertical( Horizontal( *body ), NodeInfo() )
+        with Vertical():
+            with Horizontal():
+                yield self.ast_pane()
+                yield self.source_pane()
+            yield NodeInfo()
         yield Footer()
 
     def _init_tree( self ) -> None:
@@ -146,10 +125,7 @@ class MainDisplay( Screen ):
 
     def on_mount( self ) -> None:
         """Sort the screen once the DOM is mounted."""
-        if self.query( ASTView ):
-            self._init_tree()
-        else:
-            self.query_one( DirectoryTree ).focus()
+        self._init_tree()
 
     def highlight_node( self, node: ASTNode ) -> None:
         """Update the display to highlight the given node.
@@ -227,12 +203,43 @@ class MainDisplay( Screen ):
         except NoMatches:
             pass
 
+    async def open_file( self, new_file: Path ) -> None:
+        """Open a new file for viewing.
+
+        Args:
+            new_file: The new file to view.
+        """
+        self._args.file = new_file
+
+        # Currently there's no good way to 100% empty out a Textual Tree and
+        # populate it again from scratch. You can clear everything under the
+        # root node, which would almost work, but then there's no public
+        # method of setting a new label or data. Se we need to do a rebuild
+        # dance instead. First, if there's already an ASTView in the DOM...
+        if self.query( ASTView ):
+            # ...remove it...
+            await self.query_one( ASTView ).remove()
+            # ...and then add a fresh one, splicing it into the display
+            # before the source view.
+            await self.mount( self.ast_pane(), before="Source" )
+        else:
+            # TODO: This is a hangover from before.
+            # There's no ASTView. This means we've dome from just showing
+            # just the directory tree and nothing else. In that case we need
+            # to spin up and splice in an ASTView...
+            await self.mount( self.ast_pane(), after="DirectoryTree" )
+            # ...and then also a Source view.
+            await self.mount( self.source_pane(), after="ASTView" )
+
+        self.query_one( Source ).show_file( self._args.file )
+        self._init_tree()
+
     def action_open_new( self ) -> None:
         """Open a new file for viewing."""
-        opener = self.query_one( DirectoryTree )
-        opener.toggle_class( "visible" )
-        if "visible" in opener.classes:
-            opener.focus()
+        self.app.push_screen( FileOpen( self._args.file.parent if self._args.file else ".", filters=Filters(
+            ( "Python Source", lambda p: p.suffix.lower() == ".py" ),
+            ( "Any",           lambda _: True )
+        ), must_exist=True ), callback=self.open_file )
 
     def watch_ast_width( self ) -> None:
         """React to the AST view width being changed by the user."""
@@ -248,40 +255,5 @@ class MainDisplay( Screen ):
         """Shrink the right pane in the display."""
         if self.ast_width < 18:
             self.ast_width += 1
-
-    async def on_directory_tree_file_selected( self, event: DirectoryTree.FileSelected ) -> None:
-        """React to a file being selected in the directory tree.
-
-        Args:
-            event: The file selection event.
-        """
-        self._args.file = Path( event.path )
-
-        # Currently there's no good way to 100% empty out a Textual Tree and
-        # populate it again from scratch. You can clear everything under the
-        # root node, which would almost work, but then there's no public
-        # method of setting a new label or data. Se we need to do a rebuild
-        # dance instead. First, if there's already an ASTView in the DOM...
-        if self.query( ASTView ):
-            # ...remove it...
-            await self.query_one( ASTView ).remove()
-            # ...and then add a fresh one, splicing it into the display
-            # before the source view.
-            await self.mount( self.ast_pane(), before="Source" )
-        else:
-            # There's no ASTView. This means we've dome from just showing
-            # just the directory tree and nothing else. In that case we need
-            # to spin up and splice in an ASTView...
-            await self.mount( self.ast_pane(), after="DirectoryTree" )
-            # ...and then also a Source view.
-            await self.mount( self.source_pane(), after="ASTView" )
-            # Finally: the DirectiryTree will have been in its initial "fill
-            # the display" state; so swap out that class and put it into
-            # "insert me on the left when called upon" state.
-            self.query_one( DirectoryTree ).toggle_class( "initial", "insert" )
-
-        self.query_one( Source ).show_file( self._args.file )
-        self.query_one( DirectoryTree ).set_class( False, "visible" )
-        self._init_tree()
 
 ### main.py ends here
