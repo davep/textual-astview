@@ -17,6 +17,8 @@ from rich.text import Text
 
 ##############################################################################
 # Textual imports.
+from textual              import on
+from textual.events       import Mount
 from textual.widgets      import Tree
 from textual.widgets.tree import TreeNode
 from textual.binding      import Binding
@@ -65,6 +67,26 @@ class ASTView( Tree[ Any ] ):
         self._name_defs   = name_defs
         self._module_path = module
 
+        self._parse( module )
+
+        # Now that we've configured things, get the Tree to do its own
+        # thing.
+        kwargs[ "label" ] = module.name
+        kwargs[ "data" ]  = self._module_path
+        super().__init__( *args, **kwargs )
+
+    @on( Mount )
+    def _populate_tree( self ) -> None:
+        """Populate the tree with the module's AST."""
+        self.add( self._module, self.root )
+        self.select_node( self.root )
+
+    def _parse( self, module: Path ) -> None:
+        """Parse the module.
+
+        Args:
+            module: The module to parse.
+        """
         # Get the AST parsed in. I *suppose* it would make sense to try and
         # do this in an async way, perhaps? But for now anyway let's just
         # parse in the whole blasted thing up front. I've never found the
@@ -74,11 +96,15 @@ class ASTView( Tree[ Any ] ):
         except SyntaxError:
             self._module = None
 
-        # Now that we've configured things, get the Tree to do its own
-        # thing.
-        kwargs[ "label" ] = module.name
-        kwargs[ "data" ]  = self._module_path
-        super().__init__( *args, **kwargs )
+    def reset( self, module: Path ) -> None:
+        """Reset the display to show a new module.
+
+        Args:
+            module: The new module to show.
+        """
+        self._parse( module )
+        super().reset( module.name, module )
+        self._populate_tree()
 
     @property
     def module_path( self ) -> Path:
@@ -204,11 +230,6 @@ class ASTView( Tree[ Any ] ):
             # It's a AST item with no fields, so don't allow expanding as
             # there's nothing to expand.
             node.allow_expand = False
-
-    def on_mount( self ) -> None:
-        """Populate the view once we're mounted."""
-        self.add( self._module, self.root )
-        self.select_node( self.root )
 
     def action_toggle_all( self ) -> None:
         """Toggle all the nodes from the selected node down."""

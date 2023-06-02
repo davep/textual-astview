@@ -78,26 +78,6 @@ class MainDisplay( Screen ):
         self._args                       = cli_args
         self._refresh: Optional[ Timer ] = None
 
-    def ast_pane( self ) -> ASTView:
-        """Make an ASTView pane.
-
-        Returns:
-            An ASTView pane for viewing the AST.
-        """
-        return ASTView( self._args.file, id="ast-view" )
-
-    def source_pane( self ) -> Source:
-        """Make a Source pane.
-
-        Returns:
-            A source pane for viewing the code.
-        """
-        return Source(
-            self._args.file,
-            dark_theme  = self._args.dark_theme,
-            light_theme = self._args.light_theme
-        )
-
     def compose( self ) -> ComposeResult:
         """Compose the main app screen.
 
@@ -107,8 +87,12 @@ class MainDisplay( Screen ):
         yield Header()
         with Vertical():
             with Horizontal():
-                yield self.ast_pane()
-                yield self.source_pane()
+                yield ASTView( self._args.file, id="ast-view" )
+                yield Source(
+                    self._args.file,
+                    dark_theme  = self._args.dark_theme,
+                    light_theme = self._args.light_theme
+                )
             yield NodeInfo()
         yield Footer()
 
@@ -210,27 +194,7 @@ class MainDisplay( Screen ):
             new_file: The new file to view.
         """
         self._args.file = new_file
-
-        # Currently there's no good way to 100% empty out a Textual Tree and
-        # populate it again from scratch. You can clear everything under the
-        # root node, which would almost work, but then there's no public
-        # method of setting a new label or data. Se we need to do a rebuild
-        # dance instead. First, if there's already an ASTView in the DOM...
-        if self.query( ASTView ):
-            # ...remove it...
-            await self.query_one( ASTView ).remove()
-            # ...and then add a fresh one, splicing it into the display
-            # before the source view.
-            await self.mount( self.ast_pane(), before="Source" )
-        else:
-            # TODO: This is a hangover from before.
-            # There's no ASTView. This means we've dome from just showing
-            # just the directory tree and nothing else. In that case we need
-            # to spin up and splice in an ASTView...
-            await self.mount( self.ast_pane(), after="DirectoryTree" )
-            # ...and then also a Source view.
-            await self.mount( self.source_pane(), after="ASTView" )
-
+        self.query_one( ASTView ).reset( new_file )
         self.query_one( Source ).show_file( self._args.file )
         self._init_tree()
 
