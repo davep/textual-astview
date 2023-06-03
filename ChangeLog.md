@@ -1,5 +1,15 @@
 # textual-astview ChangeLog
 
+## v0.7.0
+
+**Released: 2023-06-03**
+
+### Changed
+
+- Moved to using `textual-fspicker` as the way to open a new file for
+  viewing.
+- Updated to [Textual 0.27.0](https://github.com/Textualize/textual/releases/tag/v0.27.0).
+
 ## v0.6.1
 
 **Released: 2023-04-29**
