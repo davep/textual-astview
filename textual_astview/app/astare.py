@@ -105,10 +105,8 @@ def get_args() -> argparse.Namespace:
     # The remainder is the file to explore.
     parser.add_argument(
         "file",
-        help    = "The file to explore",
-        nargs   = "?",
-        type    = py_file,
-        default = "."
+        help = "The file to explore",
+        type = py_file
     )
 
     # Return the arguments.
