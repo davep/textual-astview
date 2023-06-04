@@ -187,16 +187,17 @@ class MainDisplay( Screen ):
         except NoMatches:
             pass
 
-    async def open_file( self, new_file: Path ) -> None:
+    async def open_file( self, new_file: Path | None ) -> None:
         """Open a new file for viewing.
 
         Args:
             new_file: The new file to view.
         """
-        self._args.file = new_file
-        self.query_one( ASTView ).reset( new_file )
-        self.query_one( Source ).show_file( self._args.file )
-        self._init_tree()
+        if new_file is not None:
+            self._args.file = new_file
+            self.query_one( ASTView ).reset( new_file )
+            self.query_one( Source ).show_file( self._args.file )
+            self._init_tree()
 
     def action_open_new( self ) -> None:
         """Open a new file for viewing."""

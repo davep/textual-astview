@@ -527,10 +527,10 @@
         },
         "textual-fspicker": {
             "hashes": [
-                "sha256:98809dcaa96ea4f84f0f363aa794802727455e3a345039623ab25acb40c2022a"
+                "sha256:632958c80a5db0d258855af8496f8bdebe67e3d6af2a7bf485ca1258de3eca50"
             ],
             "index": "pypi",
-            "version": "==0.0.7"
+            "version": "==0.0.9"
         },
         "typing-extensions": {
             "hashes": [
