@@ -1,6 +1,10 @@
 """Main screen for astare."""
 
 ##############################################################################
+# Backward compatibility.
+from __future__ import annotations
+
+##############################################################################
 # Python imports.
 from typing    import Final, Any, cast, Optional
 from argparse  import Namespace
