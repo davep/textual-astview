@@ -1,5 +1,13 @@
 # textual-astview ChangeLog
 
+## v0.7.1
+
+**Released: 2023-06-04**
+
+### Changed
+
+- Bumped to `textual-fspicker` v0.0.9.
+
 ## v0.7.0
 
 **Released: 2023-06-03**
