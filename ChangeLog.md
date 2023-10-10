@@ -8,6 +8,8 @@
 
 - It's now possible to open a directory from the command line, so the file
   picker appears on startup.
+- Bumped to `textual-fspicker` v0.0.10.
+- Updated to [Textual 0.39.0](https://github.com/Textualize/textual/releases/tag/v0.39.0).
 
 ## v0.7.1
 
