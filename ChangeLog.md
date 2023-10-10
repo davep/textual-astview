@@ -1,5 +1,14 @@
 # textual-astview ChangeLog
 
+## v0.8.0
+
+**Released: WiP**
+
+### Changed
+
+- It's now possible to open a directory from the command line, so the file
+  picker appears on startup.
+
 ## v0.7.1
 
 **Released: 2023-06-04**

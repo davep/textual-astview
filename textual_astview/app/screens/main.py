@@ -114,7 +114,10 @@ class MainDisplay(Screen):
 
     def on_mount(self) -> None:
         """Sort the screen once the DOM is mounted."""
-        self._init_tree()
+        if self._args.file.is_dir():
+            self.action_open_new()
+        else:
+            self._init_tree()
 
     def highlight_node(self, node: ASTNode) -> None:
         """Update the display to highlight the given node.
@@ -203,6 +206,12 @@ class MainDisplay(Screen):
             self.query_one(ASTView).reset(new_file)
             self.query_one(Source).show_file(self._args.file)
             self._init_tree()
+        elif self._args.file.is_dir():
+            # If there is no new file that means the user quit out of the
+            # file picker, and if the current file is a directory that means
+            # we're going to be in initial directory browsing mode; so just
+            # quit out.
+            self.app.exit()
 
     def action_open_new(self) -> None:
         """Open a new file for viewing."""

@@ -119,12 +119,19 @@ class Source(SourceInfo, can_focus=True):
         Note:
             This updates `_source`, but also returns is as a kindness.
         """
-        self._source = Syntax.from_path(
-            str(self._source_file),
-            line_numbers=True,
-            lexer="python",
-            theme=self._dark_theme if self.dark else self._light_theme,
-        )
+        if self._source_file.is_file():
+            self._source = Syntax.from_path(
+                str(self._source_file),
+                line_numbers=True,
+                lexer="python",
+                theme=self._dark_theme if self.dark else self._light_theme,
+            )
+        else:
+            self._source = Syntax(
+                "",
+                lexer="python",
+                theme=self._dark_theme if self.dark else self._light_theme,
+            )
         return self._source
 
     def _populate_source(self) -> None:

@@ -68,8 +68,10 @@ class ASTView(Tree[Any]):
         # Remember some key stuff
         self._name_defs = name_defs
         self._module_path = module
+        self._module: ast.Module | None = None
 
-        self._parse(module)
+        if not module.is_dir():
+            self._parse(module)
 
         # Now that we've configured things, get the Tree to do its own
         # thing.
@@ -80,8 +82,9 @@ class ASTView(Tree[Any]):
     @on(Mount)
     def _populate_tree(self) -> None:
         """Populate the tree with the module's AST."""
-        self.add(self._module, self.root)
-        self.select_node(self.root)
+        if self._module is not None:
+            self.add(self._module, self.root)
+            self.select_node(self.root)
 
     def _parse(self, module: Path) -> None:
         """Parse the module.
@@ -94,7 +97,7 @@ class ASTView(Tree[Any]):
         # parse in the whole blasted thing up front. I've never found the
         # AST parser to be noticeably slow.
         try:
-            self._module: Optional[ast.Module] = ast.parse(module.read_text())
+            self._module = ast.parse(module.read_text())
         except SyntaxError:
             self._module = None
 
@@ -104,9 +107,10 @@ class ASTView(Tree[Any]):
         Args:
             module: The new module to show.
         """
-        self._parse(module)
-        super().reset(module.name, module)
-        self._populate_tree()
+        if not module.is_dir():
+            self._parse(module)
+            super().reset(module.name, module)
+            self._populate_tree()
 
     @property
     def module_path(self) -> Path:
