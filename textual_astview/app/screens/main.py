@@ -59,7 +59,7 @@ class MainDisplay(Screen):
         Binding("ctrl+right", "shrink_right", "", show=False),
         Binding("ctrl+o", "open_new", "Open"),
         Binding("ctrl+r", "toggle_rainbow", "Rainbow"),
-        Binding("ctrl+d", "toggle_dark", "Light/Dark"),
+        Binding("ctrl+d", "app.toggle_dark", "Light/Dark"),
         Binding("ctrl+q", "app.quit", "Quit"),
     ]
     """The bindings for the main screen."""
@@ -114,6 +114,7 @@ class MainDisplay(Screen):
 
     def on_mount(self) -> None:
         """Sort the screen once the DOM is mounted."""
+        self.watch(self.app, "dark", self.watch_dark)
         if self._args.file.is_dir():
             self.action_open_new()
         else:
@@ -186,9 +187,8 @@ class MainDisplay(Screen):
         """Toggle the rainbow highlight flag."""
         self.rainbow = not self.rainbow
 
-    def action_toggle_dark(self) -> None:
-        """Toggle daark mode."""
-        self.app.dark = not self.app.dark
+    def watch_dark(self) -> None:
+        """React to the dark mode being toggled."""
         try:
             self.query_one(Source).dark = self.app.dark
             self.highlight_node(cast(ASTNode, self.query_one(ASTView).cursor_node))
