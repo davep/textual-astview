@@ -8,6 +8,7 @@ lint   := $(run) pylint
 mypy   := $(run) mypy
 twine  := $(run) twine
 vermin := $(run) vermin -v --no-parse-comments --backport dataclasses --backport typing --backport argparse --eval-annotations
+black  := $(run) black
 
 ##############################################################################
 # Run the app.
@@ -28,6 +29,7 @@ console:			# Run up the Textual development console.
 .PHONY: setup
 setup:				# Install all dependencies
 	pipenv sync --dev
+	$(run) pre-commit install
 
 .PHONY: resetup
 resetup:			# Recreate the virtual environment from scratch
@@ -91,6 +93,10 @@ dist: packagecheck		# Upload to pypi
 
 ##############################################################################
 # Utility.
+.PHONY: ugly
+ugly:				# Reformat the code with black.
+	$(black) $(lib)
+
 .PHONY: repl
 repl:				# Start a Python REPL
 	$(python)

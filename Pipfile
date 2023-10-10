@@ -14,6 +14,8 @@ twine = "*"
 vermin = "*"
 types-pygments = "*"
 build = "*"
+pre-commit = "*"
+black = "*"
 
 [requires]
 python_version = "3.11"
