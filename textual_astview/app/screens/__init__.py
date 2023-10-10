@@ -6,8 +6,6 @@ from .main import MainDisplay
 
 ##############################################################################
 # Export the screens.
-__all__ = [
-    "MainDisplay"
-]
+__all__ = ["MainDisplay"]
 
 ### __init__.py ends here

@@ -6,21 +6,21 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from typing    import Final, Any, cast, Optional
-from argparse  import Namespace
+from typing import Final, Any, cast, Optional
+from argparse import Namespace
 from functools import partial
-from pathlib   import Path
+from pathlib import Path
 
 ##############################################################################
 # Textual imports.
-from textual.app        import ComposeResult
-from textual.binding    import Binding
-from textual.screen     import Screen
-from textual.reactive   import reactive
-from textual.timer      import Timer
-from textual.widgets    import Header, Footer, Tree
+from textual.app import ComposeResult
+from textual.binding import Binding
+from textual.screen import Screen
+from textual.reactive import reactive
+from textual.timer import Timer
+from textual.widgets import Header, Footer, Tree
 from textual.containers import Horizontal, Vertical
-from textual.css.query  import NoMatches
+from textual.css.query import NoMatches
 
 ##############################################################################
 # Other imports.
@@ -30,8 +30,9 @@ from textual_fspicker import FileOpen, Filters
 # Local imports.
 from textual_astview import ASTView, ASTNode, NodeInfo, Source, __version__
 
+
 ##############################################################################
-class MainDisplay( Screen ):
+class MainDisplay(Screen):
     """The main display of the app."""
 
     DEFAULT_CSS = """
@@ -54,35 +55,35 @@ class MainDisplay( Screen ):
     """
 
     BINDINGS = [
-        Binding( "ctrl+left",  "shrink_left",    "", show=False ),
-        Binding( "ctrl+right", "shrink_right",   "", show=False ),
-        Binding( "ctrl+o",     "open_new",       "Open" ),
-        Binding( "ctrl+r",     "toggle_rainbow", "Rainbow" ),
-        Binding( "ctrl+d",     "toggle_dark",    "Light/Dark" ),
-        Binding( "ctrl+q",     "app.quit",       "Quit" )
+        Binding("ctrl+left", "shrink_left", "", show=False),
+        Binding("ctrl+right", "shrink_right", "", show=False),
+        Binding("ctrl+o", "open_new", "Open"),
+        Binding("ctrl+r", "toggle_rainbow", "Rainbow"),
+        Binding("ctrl+d", "toggle_dark", "Light/Dark"),
+        Binding("ctrl+q", "app.quit", "Quit"),
     ]
     """The bindings for the main screen."""
 
     UPDATE_DELAY: Final = 0.2
     """How long to leave it before updating the highlight in the source."""
 
-    rainbow = reactive( False, init=False )
+    rainbow = reactive(False, init=False)
     """Should 'rainbow' highlighting be used for the source?"""
 
-    ast_width: reactive[ int ] = reactive( 10, init=False )
+    ast_width: reactive[int] = reactive(10, init=False)
     """The relative width of the reactive pane."""
 
-    def __init__( self, cli_args: Namespace, *args: Any, **kwargs: Any ) -> None:
+    def __init__(self, cli_args: Namespace, *args: Any, **kwargs: Any) -> None:
         """Initialise the main screen.
 
         Args:
             cli_args: The command line arguments.
         """
-        super().__init__( *args, **kwargs )
-        self._args                       = cli_args
-        self._refresh: Optional[ Timer ] = None
+        super().__init__(*args, **kwargs)
+        self._args = cli_args
+        self._refresh: Optional[Timer] = None
 
-    def compose( self ) -> ComposeResult:
+    def compose(self) -> ComposeResult:
         """Compose the main app screen.
 
         Returns:
@@ -91,40 +92,40 @@ class MainDisplay( Screen ):
         yield Header()
         with Vertical():
             with Horizontal():
-                yield ASTView( self._args.file, id="ast-view" )
+                yield ASTView(self._args.file, id="ast-view")
                 yield Source(
                     self._args.file,
-                    dark_theme  = self._args.dark_theme,
-                    light_theme = self._args.light_theme
+                    dark_theme=self._args.dark_theme,
+                    light_theme=self._args.light_theme,
                 )
             yield NodeInfo()
         yield Footer()
 
-    def _init_tree( self ) -> None:
+    def _init_tree(self) -> None:
         """Set up the tree view when (re)loaded."""
-        view = self.query_one( ASTView )
+        view = self.query_one(ASTView)
         view.root.expand()
         if view.root.children:
-            view.root.children[ 0 ].expand()
-            if view.root.children[ 0 ].children:
-                view.root.children[ 0 ].children[ 0 ].expand()
+            view.root.children[0].expand()
+            if view.root.children[0].children:
+                view.root.children[0].children[0].expand()
         view.focus()
-        self.highlight_node( view.root )
+        self.highlight_node(view.root)
 
-    def on_mount( self ) -> None:
+    def on_mount(self) -> None:
         """Sort the screen once the DOM is mounted."""
         self._init_tree()
 
-    def highlight_node( self, node: ASTNode ) -> None:
+    def highlight_node(self, node: ASTNode) -> None:
         """Update the display to highlight the given node.
 
         Args:
             node: The node to highlight.
         """
-        self.query_one( NodeInfo ).show( node )
-        self.query_one( Source ).highlight( node, self.rainbow )
+        self.query_one(NodeInfo).show(node)
+        self.query_one(Source).highlight(node, self.rainbow)
 
-    def on_tree_node_highlighted( self, event: Tree.NodeHighlighted ) -> None:
+    def on_tree_node_highlighted(self, event: Tree.NodeHighlighted) -> None:
         """React to a node in the tree being highlighted.
 
         Args:
@@ -141,10 +142,10 @@ class MainDisplay( Screen ):
             self._refresh.stop()
         # Book in a fresh refresh the full delay on from this event.
         self._refresh = self.set_timer(
-            self.UPDATE_DELAY, partial( self.highlight_node, event.node )
+            self.UPDATE_DELAY, partial(self.highlight_node, event.node)
         )
 
-    def on_tree_node_selected( self, event: Tree.NodeSelected ) -> None:
+    def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         """React to a node in the tree being selected.
 
         Args:
@@ -163,35 +164,35 @@ class MainDisplay( Screen ):
         # Selected is a mouse click or someone bouncing on the enter key,
         # there's no point in delaying; so let's make it look a bit more
         # snappy by updating right away.
-        self.highlight_node( event.node )
+        self.highlight_node(event.node)
 
-    def watch_rainbow( self, new_value: bool ) -> None:
+    def watch_rainbow(self, new_value: bool) -> None:
         """React to the rainbow flag being changed.
 
         Args:
             new_value: The new value for the flag.
         """
         try:
-            self.query_one( Source ).highlight(
-                cast( ASTNode, self.query_one( ASTView ).cursor_node ), new_value
+            self.query_one(Source).highlight(
+                cast(ASTNode, self.query_one(ASTView).cursor_node), new_value
             )
         except NoMatches:
             pass
 
-    def action_toggle_rainbow( self ) -> None:
+    def action_toggle_rainbow(self) -> None:
         """Toggle the rainbow highlight flag."""
         self.rainbow = not self.rainbow
 
-    def action_toggle_dark( self ) -> None:
+    def action_toggle_dark(self) -> None:
         """Toggle daark mode."""
         self.app.dark = not self.app.dark
         try:
-            self.query_one( Source ).dark = self.app.dark
-            self.highlight_node( cast( ASTNode, self.query_one( ASTView ).cursor_node ) )
+            self.query_one(Source).dark = self.app.dark
+            self.highlight_node(cast(ASTNode, self.query_one(ASTView).cursor_node))
         except NoMatches:
             pass
 
-    async def open_file( self, new_file: Path | None ) -> None:
+    async def open_file(self, new_file: Path | None) -> None:
         """Open a new file for viewing.
 
         Args:
@@ -199,30 +200,38 @@ class MainDisplay( Screen ):
         """
         if new_file is not None:
             self._args.file = new_file
-            self.query_one( ASTView ).reset( new_file )
-            self.query_one( Source ).show_file( self._args.file )
+            self.query_one(ASTView).reset(new_file)
+            self.query_one(Source).show_file(self._args.file)
             self._init_tree()
 
-    def action_open_new( self ) -> None:
+    def action_open_new(self) -> None:
         """Open a new file for viewing."""
-        self.app.push_screen( FileOpen( self._args.file.parent if self._args.file else ".", filters=Filters(
-            ( "Python Source", lambda p: p.suffix.lower() == ".py" ),
-            ( "Any",           lambda _: True )
-        ), must_exist=True ), callback=self.open_file )
+        self.app.push_screen(
+            FileOpen(
+                self._args.file.parent if self._args.file else ".",
+                filters=Filters(
+                    ("Python Source", lambda p: p.suffix.lower() == ".py"),
+                    ("Any", lambda _: True),
+                ),
+                must_exist=True,
+            ),
+            callback=self.open_file,
+        )
 
-    def watch_ast_width( self ) -> None:
+    def watch_ast_width(self) -> None:
         """React to the AST view width being changed by the user."""
-        self.query_one( ASTView ).styles.width = f"{self.ast_width}fr"
-        self.query_one( Source ).styles.width = f"{10 + ( 10 - self.ast_width )}fr"
+        self.query_one(ASTView).styles.width = f"{self.ast_width}fr"
+        self.query_one(Source).styles.width = f"{10 + ( 10 - self.ast_width )}fr"
 
-    def action_shrink_left( self ) -> None:
+    def action_shrink_left(self) -> None:
         """Shrink the left pane in the display."""
         if self.ast_width > 2:
             self.ast_width -= 1
 
-    def action_shrink_right( self ) -> None:
+    def action_shrink_right(self) -> None:
         """Shrink the right pane in the display."""
         if self.ast_width < 18:
             self.ast_width += 1
+
 
 ### main.py ends here

@@ -6,8 +6,8 @@ from __future__ import annotations
 
 ##############################################################################
 # Python imports.
-from pathlib   import Path
-from typing    import Any, ClassVar, Final
+from pathlib import Path
+from typing import Any, ClassVar, Final
 from itertools import islice
 
 ##############################################################################
@@ -16,22 +16,23 @@ from rich.syntax import Syntax
 
 ##############################################################################
 # Textual imports.
-from textual          import events
-from textual.app      import ComposeResult
-from textual.widgets  import Static
+from textual import events
+from textual.app import ComposeResult
+from textual.widgets import Static
 from textual.geometry import Region
 from textual.reactive import reactive
 
 ##############################################################################
 # Local imports.
-from .astview     import ASTNode
+from .astview import ASTNode
 from .source_info import SourceInfo
 
+
 ##############################################################################
-class Source( SourceInfo, can_focus=True ):
+class Source(SourceInfo, can_focus=True):
     """Displays the source code for the file."""
 
-    COMPONENT_CLASSES: ClassVar[ set[ str ] ] = {
+    COMPONENT_CLASSES: ClassVar[set[str]] = {
         "source--ast-node-dark-mode-highlight",
         "source--ast-node-dark-mode-highlight-1",
         "source--ast-node-dark-mode-highlight-2",
@@ -87,14 +88,16 @@ class Source( SourceInfo, can_focus=True ):
     DEFAULT_LIGHT_THEME: Final = "xcode"
     """The default light theme to use for the source."""
 
-    dark = reactive( True )
+    dark = reactive(True)
     """Should the source be shown in a dark theme?"""
 
     def __init__(
-            self, source: Path, *args: Any,
-            dark_theme: str=DEFAULT_DARK_THEME,
-            light_theme: str=DEFAULT_LIGHT_THEME,
-            **kwargs: Any
+        self,
+        source: Path,
+        *args: Any,
+        dark_theme: str = DEFAULT_DARK_THEME,
+        light_theme: str = DEFAULT_LIGHT_THEME,
+        **kwargs: Any,
     ) -> None:
         """Initialise the source viewing widget.
 
@@ -102,12 +105,12 @@ class Source( SourceInfo, can_focus=True ):
             dark_theme (optional): The theme to use for dark mode.
             light_theme (optional): The theme to use for light mode.
         """
-        super().__init__( *args, **kwargs )
+        super().__init__(*args, **kwargs)
         self._source_file = source
-        self._dark_theme  = dark_theme
+        self._dark_theme = dark_theme
         self._light_theme = light_theme
 
-    def _build_source( self ) -> Syntax:
+    def _build_source(self) -> Syntax:
         """Builds a new `Stntax` of the file being viewed.
 
         Returns:
@@ -117,21 +120,23 @@ class Source( SourceInfo, can_focus=True ):
             This updates `_source`, but also returns is as a kindness.
         """
         self._source = Syntax.from_path(
-            str( self._source_file ), line_numbers=True, lexer="python",
-            theme=self._dark_theme if self.dark else self._light_theme
+            str(self._source_file),
+            line_numbers=True,
+            lexer="python",
+            theme=self._dark_theme if self.dark else self._light_theme,
         )
         return self._source
 
-    def _populate_source( self ) -> None:
+    def _populate_source(self) -> None:
         """Repopulate the source display.
 
         Note:
             This should only be used when everything about the source has
             changed.
         """
-        self.query_one( Static ).update( self._build_source() )
+        self.query_one(Static).update(self._build_source())
 
-    def show_file( self, new_file: Path ) -> None:
+    def show_file(self, new_file: Path) -> None:
         """Show a new file in the widget.
 
         Args:
@@ -140,7 +145,7 @@ class Source( SourceInfo, can_focus=True ):
         self._source_file = new_file
         self._populate_source()
 
-    def compose( self ) -> ComposeResult:
+    def compose(self) -> ComposeResult:
         """Compose the source display.
 
         Returns:
@@ -148,11 +153,11 @@ class Source( SourceInfo, can_focus=True ):
         """
         yield Static()
 
-    def on_mount( self ) -> None:
+    def on_mount(self) -> None:
         """Configure the widget after the DOM is up and going."""
         self._populate_source()
 
-    def watch_dark( self, _: bool ) -> None:
+    def watch_dark(self, _: bool) -> None:
         """React to our own dark mode toggle.
 
         Note:
@@ -160,26 +165,36 @@ class Source( SourceInfo, can_focus=True ):
         """
         self._populate_source()
 
-    def on_click( self, _: events.Click ) -> None:
+    def on_click(self, _: events.Click) -> None:
         """React to a mouse click."""
         self.focus()
 
     @property
-    def _highlight_style( self ) -> str:
+    def _highlight_style(self) -> str:
         return f"source--ast-node-{'dark' if self.dark else 'light'}-mode-highlight"
 
-    def _highlight_ancestors( self, node: ASTNode ) -> None:
+    def _highlight_ancestors(self, node: ASTNode) -> None:
         """Apply highlighting to location-based ancestors of the given node.
 
         Args:
             node: The node to find the ancestors of.
         """
-        for rule, ancestor in reversed( list( enumerate( islice( self.file_location_path_from( node ), 1, self.MAX_ANCESTOR + 1 ) ) ) ):
+        for rule, ancestor in reversed(
+            list(
+                enumerate(
+                    islice(self.file_location_path_from(node), 1, self.MAX_ANCESTOR + 1)
+                )
+            )
+        ):
             self._source.stylize_range(
-                self.get_component_rich_style( f"{self._highlight_style}-{rule + 1}", partial=True ), ancestor[ :2 ], ancestor[ 2: ]
+                self.get_component_rich_style(
+                    f"{self._highlight_style}-{rule + 1}", partial=True
+                ),
+                ancestor[:2],
+                ancestor[2:],
             )
 
-    def highlight( self, node: ASTNode, rainbow: bool=False ) -> None:
+    def highlight(self, node: ASTNode, rainbow: bool = False) -> None:
         """Highlight the given AST data in the source.
 
         Args:
@@ -199,18 +214,21 @@ class Source( SourceInfo, can_focus=True ):
         # first, so the current highlight is always at the top of the
         # styles.
         if rainbow:
-            self._highlight_ancestors( node )
+            self._highlight_ancestors(node)
 
         # If the current node has a file location...
-        if ( loc := self.file_location_of( node ) ):
+        if loc := self.file_location_of(node):
             # ...highlight and scroll to it.
             self._source.stylize_range(
-                self.get_component_rich_style( self._highlight_style, partial=True ), loc[ :2 ], loc[ 2: ]
+                self.get_component_rich_style(self._highlight_style, partial=True),
+                loc[:2],
+                loc[2:],
             )
             line, _, end_line, _ = loc
-            self.scroll_to_region( Region( y=line - 1, height=( end_line - line ) + 1 ) )
+            self.scroll_to_region(Region(y=line - 1, height=(end_line - line) + 1))
 
         # Update the display.
-        self.query_one( Static ).refresh()
+        self.query_one(Static).refresh()
+
 
 ### source.py ends here
