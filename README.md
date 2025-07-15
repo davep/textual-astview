@@ -1,3 +1,10 @@
+> [!NOTE]
+>
+> This repository is unlikely to get future updates; I've created a new
+> application that does this, and more, called
+> [DHV](https://github.com/davep/dhv). I suggest installing and playing with
+> that instead.
+
 # textual-astview
 
 [![PyPI version](https://badge.fury.io/py/textual-astview.svg)](https://badge.fury.io/py/textual-astview)
